@@ -1,0 +1,6 @@
+venv
+prod.env
+.idea
+.vscode
+.vercel
+tmp

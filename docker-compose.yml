@@ -1,0 +1,7 @@
+version: "3.9"
+
+services:
+  bot:
+    restart: on-failure
+    image: ghcr.io/warung-international/peradaban:master
+    env_file: prod.env

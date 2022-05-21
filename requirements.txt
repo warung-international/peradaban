@@ -1,0 +1,14 @@
+aiohttp
+algoliasearch
+dnspython
+git+https://github.com/Discord-Snake-Pit/NAFF.git@dev
+millify
+orjson
+pillow
+pygithub
+pymongo
+python-dateutil
+python-dotenv
+sentry-sdk
+wget
+yt-dlp

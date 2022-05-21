@@ -1,0 +1,76 @@
+name: Build Production
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: warung-international/peradaban
+
+jobs:
+  build_ghcr:
+    name: Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout Actions
+        id: actions_checkout
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: warung-international
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy_to_heroku:
+    name: Deploy
+    needs: build_ghcr
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Github Actions
+        uses: actions/checkout@v2
+      - name: Replace (.env)'s
+        uses: franzbischoff/replace_envs@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          RAPID_API_KEY: ${{ secrets.RAPID_API_KEY }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_ID_2: ${{ secrets.GIST_ID_2 }}
+          WELCOME_GIST_ID: ${{ secrets.WELCOME_GIST_ID }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        with:
+          from_file: '.env'
+          to_file: '.env'
+          commit: 'false'
+      - name: Push to Heroku
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          # Production 1
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
