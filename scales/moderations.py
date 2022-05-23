@@ -248,8 +248,59 @@ class Moderation(Extension):
                 timestamp=datetime.utcnow(),
             )
             embed.set_thumbnail(url=member.avatar.url)
+    @slash_command(
+        name="kick",
+        description="Kick a member from the server",
+    )
+    @slash_option(
+        name="member",
+        description="The @member to kick",
+        opt_type=OptionTypes.USER,
+        required=True,
+    )
+    @slash_option(
+        name="reason",
+        description="Reason of the kick",
+        opt_type=OptionTypes.STRING,
+        required=False,
+    )
+    @check(member_permissions(Permissions.KICK_MEMBERS))
+    async def kick(
+        self,
+        ctx: InteractionContext,
+        member: OptionTypes.USER = None,
+        reason: str = "No reason given",
+    ):
+        if member is ctx.author:
+                await ctx.send("You can't kick yourself", ephemeral=True)
+                return
+        if member.member_permissions(Permissions.ADMINISTRATOR) == True:
+            await ctx.send("You can't kick an admin", ephemeral=True)
+            return
+        elif member.member_permissions(Permissions.BAN_MEMBERS) == True:
+            await ctx.send("You can't kick users with ban perms", ephemeral=True)
+            return
+        elif member.member_permissions(Permissions.KICK_MEMBERS) == True:
+            await ctx.send("You can't kick users with kick perms", ephemeral=True)
+            return
+        
+        if ctx.author.top_role == member.top_role:
+            embed = Embed(description=f":x: You can't kick people with the same role as you!",
+                        color=0xDD2222)
             await ctx.send(embed=embed)
+            return
 
+        if ctx.author.top_role.position < member.top_role.position:
+            embed = Embed(description=f":x: You can't kick people with roles higher than yours!",
+                        color=0xDD2222)
+            await ctx.send(embed=embed)
+            return
+        
+        await ctx.guild.kick(member, reason)
+
+        embed = Embed(description=f"**Reason:** {reason}")
+        embed.set_author(name=f"{member} has been kicked", icon_url=member.avatar.url)
+        return await ctx.send(embed=embed)
 
 def setup(bot):
     Moderation(bot)
