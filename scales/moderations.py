@@ -306,7 +306,8 @@ class Moderation(Extension):
 
     @slash_command(
         name="tempmute",
-        description="Temporarily mute a member from the server",
+        sub_cmd_name="on",
+        sub_cmd_description="Temporarily mute a member from the server",
     )
     @slash_option(
         name="member",
