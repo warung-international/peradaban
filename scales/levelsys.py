@@ -300,20 +300,20 @@ class levellings(Extension):
         member = event.member
 
         if not member.bot:
-            stats = levelling.find_one({"id": message.author.id})
+            stats = levelling.find_one({"id": member.id})
             if stats is None:
                 newuserxp = 0
                 newuser = {
-                    "id": message.author.id,
+                    "id": member.id,
                     "xp": newuserxp,
-                    "username": message.author.username,
-                    "discrim": message.author.discriminator,
+                    "username": member.username,
+                    "discrim": member.discriminator,
                     "messagecount": 0,
-                    "image_url": str(message.author.avatar.url),
+                    "image_url": str(member.avatar.url),
                     "level": 0,
                     "formatxp": f"{millify(newuserxp)}",
                     "formatmessage": f"{millify(0)}",
-                    "displayname": message.author.display_name,
+                    "displayname": member.display_name,
                     "last_message": f"{datetime.datetime.utcnow().isoformat()}",
                 }
                 levelling.insert_one(newuser)
