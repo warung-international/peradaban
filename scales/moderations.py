@@ -81,12 +81,15 @@ class Moderation(Extension):
     )
     @check(member_permissions(Permissions.MANAGE_MESSAGES))
     async def slow_on(self, ctx: InteractionContext, timeout: int = 0):
-        await ctx.channel.edit(rate_limit_per_user=timeout)
-        embed = Embed(
-            description=f"<:check:839158727512293406> {ctx.channel.mention} is now in  *s l o w  m o t i o n*. Regular users can only post once every {timeout} seconds.\n\n(Suggestion: Type `/slowmode off` when you want to disable slowmode)",
-            color=0x00FF00,
-        )
-        await ctx.send(embed=embed)
+        if timeout <= 0:
+            return await ctx.send("Please Specify how long should the slowmode be.")
+        else:
+            await ctx.channel.edit(rate_limit_per_user=timeout)
+            embed = Embed(
+                description=f"<:check:839158727512293406> {ctx.channel.mention} is now in  *s l o w  m o t i o n*. Regular users can only post once every {timeout} seconds.\n\n(Suggestion: Type `/slowmode off` when you want to disable slowmode)",
+                color=0x00FF00,
+            )
+            await ctx.send(embed=embed)
 
     @slash_command(
         name="clear",
