@@ -165,10 +165,10 @@ class Moderation(Extension):
         if banned is None:
             member = find_member(ctx, member.id)
             if member is not None:
-                if member.has_permission(Permissions.ADMINISTRATOR) == True:
+                if member.member_permissions(Permissions.ADMINISTRATOR) == True:
                     await ctx.send("You can't ban an admin", ephemeral=True)
                     return
-                elif member.has_permission(Permissions.BAN_MEMBERS) == True:
+                elif member.member_permissions(Permissions.BAN_MEMBERS) == True:
                     await ctx.send("You can't ban users with ban perms", ephemeral=True)
                     return
                 elif ctx.author.top_role == member.top_role:
