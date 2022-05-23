@@ -325,7 +325,7 @@ class levellings(Extension):
     @listen()
     async def on_member_leave(self, event: MemberRemove):
         member = event.member
-        stats = levelling.find_one({"id": message.author.id})
+        stats = levelling.find_one({"id": member.id})
         if stats is not None:
             levelling.delete_one({"id": member.id})
         else:
