@@ -188,7 +188,9 @@ class Moderation(Extension):
                     return
 
             embed = Embed(description=f"**Reason:** {reason}")
-            embed.set_author(name=f"{member} has been banned", icon_url=member.avatar.url)
+            embed.set_author(
+                name=f"{member} has been banned", icon_url=member.avatar.url
+            )
             await ctx.send(embed=embed)
             await ctx.guild.ban(
                 DiscordObject(id=int(member.id), client=self.bot),
@@ -239,9 +241,10 @@ class Moderation(Extension):
         else:
             await ctx.guild.unban(member, reason)
             embed = Embed(description=f"**Reason:** {reason}")
-            embed.set_author(name=f"{member} has been unbanned", icon_url=member.avatar.url)
+            embed.set_author(
+                name=f"{member} has been unbanned", icon_url=member.avatar.url
+            )
             await ctx.send(embed=embed)
-
 
     @slash_command(
         name="kick",
@@ -267,8 +270,8 @@ class Moderation(Extension):
         reason: str = "No reason given",
     ):
         if member is ctx.author:
-                await ctx.send("You can't kick yourself", ephemeral=True)
-                return
+            await ctx.send("You can't kick yourself", ephemeral=True)
+            return
         if member.member_permissions(Permissions.ADMINISTRATOR) == True:
             await ctx.send("You can't kick an admin", ephemeral=True)
             return
@@ -278,19 +281,23 @@ class Moderation(Extension):
         elif member.member_permissions(Permissions.KICK_MEMBERS) == True:
             await ctx.send("You can't kick users with kick perms", ephemeral=True)
             return
-        
+
         if ctx.author.top_role == member.top_role:
-            embed = Embed(description=f":x: You can't kick people with the same role as you!",
-                        color=0xDD2222)
+            embed = Embed(
+                description=f":x: You can't kick people with the same role as you!",
+                color=0xDD2222,
+            )
             await ctx.send(embed=embed)
             return
 
         if ctx.author.top_role.position < member.top_role.position:
-            embed = Embed(description=f":x: You can't kick people with roles higher than yours!",
-                        color=0xDD2222)
+            embed = Embed(
+                description=f":x: You can't kick people with roles higher than yours!",
+                color=0xDD2222,
+            )
             await ctx.send(embed=embed)
             return
-        
+
         await ctx.guild.kick(member, reason)
 
         embed = Embed(description=f"**Reason:** {reason}")
@@ -328,8 +335,8 @@ class Moderation(Extension):
         reason: str = "No reason given",
     ):
         if member is ctx.author:
-                await ctx.send("You can't mute yourself", ephemeral=True)
-                return
+            await ctx.send("You can't mute yourself", ephemeral=True)
+            return
         if member.member_permissions(Permissions.ADMINISTRATOR) == True:
             await ctx.send("You can't mute an admin", ephemeral=True)
             return
@@ -339,25 +346,32 @@ class Moderation(Extension):
         elif member.member_permissions(Permissions.MODERATE_MEMBERS) == True:
             await ctx.send("You can't mute users with timeout perms", ephemeral=True)
             return
-        
+
         if ctx.author.top_role == member.top_role:
-            embed = Embed(description=f":x: You can't mute people with the same role as you!",
-                        color=0xDD2222)
+            embed = Embed(
+                description=f":x: You can't mute people with the same role as you!",
+                color=0xDD2222,
+            )
             await ctx.send(embed=embed)
             return
 
         if ctx.author.top_role.position < member.top_role.position:
-            embed = Embed(description=f":x: You can't mute people with roles higher than yours!",
-                        color=0xDD2222)
+            embed = Embed(
+                description=f":x: You can't mute people with roles higher than yours!",
+                color=0xDD2222,
+            )
             await ctx.send(embed=embed)
             return
-        
+
         until_when = datetime.utcnow() + timedelta(seconds=duration)
         await ctx.member.timeout(until_when, reason)
 
         embed = Embed(description=f"**Reason:** {reason}")
-        embed.set_author(name=f"{member} has been temporarily muted", icon_url=member.avatar.url)
+        embed.set_author(
+            name=f"{member} has been temporarily muted", icon_url=member.avatar.url
+        )
         return await ctx.send(embed=embed)
+
 
 def setup(bot):
     Moderation(bot)
