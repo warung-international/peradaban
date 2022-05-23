@@ -26,9 +26,12 @@ load_dotenv()
 
 
 class tools(Extension):
+    def __init__(self, bot):
+        self.bot = bot
+        self.bot_start_time = datetime.datetime.utcnow()
+
     async def uptime(self, ctx):
-        bot_start_time = datetime.datetime.utcnow()
-        uptime = datetime.datetime.utcnow() - bot_start_time
+        uptime = datetime.datetime.utcnow() - self.bot_start_time
 
         day = uptime.days
         day = str(day)
@@ -52,7 +55,7 @@ class tools(Extension):
             description="The bot has been online for %s hours %s minutes %s seconds."
             % (hours, minitues, seconds),
             color=0x0C73D3,
-            timestamp=bot_start_time,
+            timestamp=self.bot_start_time,
         )
         embed.set_footer(text="Bot start time")
         await ctx.send(embed=embed)
