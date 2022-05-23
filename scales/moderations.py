@@ -165,10 +165,10 @@ class Moderation(Extension):
         if banned is None:
             member = find_member(ctx, member.id)
             if member is not None:
-                if member.member_permissions(Permissions.ADMINISTRATOR) == True:
+                if member.has_permission(Permissions.ADMINISTRATOR) == True:
                     await ctx.send("You can't ban an admin", ephemeral=True)
                     return
-                elif member.member_permissions(Permissions.BAN_MEMBERS) == True:
+                elif member.has_permission(Permissions.BAN_MEMBERS) == True:
                     await ctx.send("You can't ban users with ban perms", ephemeral=True)
                     return
                 elif ctx.author.top_role == member.top_role:
@@ -272,13 +272,13 @@ class Moderation(Extension):
         if member is ctx.author:
             await ctx.send("You can't kick yourself", ephemeral=True)
             return
-        if member.member_permissions(Permissions.ADMINISTRATOR) == True:
+        if member.has_permission(Permissions.ADMINISTRATOR) == True:
             await ctx.send("You can't kick an admin", ephemeral=True)
             return
-        elif member.member_permissions(Permissions.BAN_MEMBERS) == True:
+        elif member.has_permission(Permissions.BAN_MEMBERS) == True:
             await ctx.send("You can't kick users with ban perms", ephemeral=True)
             return
-        elif member.member_permissions(Permissions.KICK_MEMBERS) == True:
+        elif member.has_permission(Permissions.KICK_MEMBERS) == True:
             await ctx.send("You can't kick users with kick perms", ephemeral=True)
             return
 
@@ -337,13 +337,13 @@ class Moderation(Extension):
         if member is ctx.author:
             await ctx.send("You can't mute yourself", ephemeral=True)
             return
-        if member.member_permissions(Permissions.ADMINISTRATOR) == True:
+        if member.has_permission(Permissions.ADMINISTRATOR) == True:
             await ctx.send("You can't mute an admin", ephemeral=True)
             return
-        elif member.member_permissions(Permissions.BAN_MEMBERS) == True:
+        elif member.has_permission(Permissions.BAN_MEMBERS) == True:
             await ctx.send("You can't mute users with ban perms", ephemeral=True)
             return
-        elif member.member_permissions(Permissions.MODERATE_MEMBERS) == True:
+        elif member.has_permission(Permissions.MODERATE_MEMBERS) == True:
             await ctx.send("You can't mute users with timeout perms", ephemeral=True)
             return
 
@@ -364,7 +364,7 @@ class Moderation(Extension):
             return
 
         until_when = datetime.utcnow() + timedelta(seconds=duration)
-        await ctx.member.timeout(until_when, reason)
+        await member.timeout(until_when, reason)
 
         embed = Embed(description=f"**Reason:** {reason}")
         embed.set_author(
