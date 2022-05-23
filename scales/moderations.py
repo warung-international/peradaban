@@ -187,12 +187,8 @@ class Moderation(Extension):
                     await ctx.send(embed=embed)
                     return
 
-            embed = Embed(
-                description=f"{member} **was banned** | {reason} \n**User ID:** {member.id} \n**Actioned by:** {ctx.author.mention}",
-                color=0x0C73D3,
-                timestamp=datetime.utcnow(),
-            )
-            embed.set_thumbnail(url=member.avatar.url)
+            embed = Embed(description=f"**Reason:** {reason}")
+            embed.set_author(name=f"{member} has been banned", icon_url=member.avatar.url)
             await ctx.send(embed=embed)
             await ctx.guild.ban(
                 DiscordObject(id=int(member.id), client=self.bot),
@@ -242,12 +238,11 @@ class Moderation(Extension):
             return
         else:
             await ctx.guild.unban(member, reason)
-            embed = Embed(
-                description=f"{member} **was unbanned by {ctx.author.mention}** | {reason} \n**User ID:** {member.id}",
-                color=0x0C73D3,
-                timestamp=datetime.utcnow(),
-            )
-            embed.set_thumbnail(url=member.avatar.url)
+            embed = Embed(description=f"**Reason:** {reason}")
+            embed.set_author(name=f"{member} has been unbanned", icon_url=member.avatar.url)
+            await ctx.send(embed=embed)
+
+
     @slash_command(
         name="kick",
         description="Kick a member from the server",
