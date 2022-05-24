@@ -335,8 +335,9 @@ class Moderation(Extension):
         duration: int = None,
         reason: str = "No reason given",
     ):
-        if duration <= 0:
-            await ctx.send("Duration must be greater than 0", ephemeral=True)
+        if (duration < 10) or (duration > 2419200):
+            await ctx.send("Mute time can't be shorter than 10 seconds and longer than 28 days.", ephemeral=True)
+            return
         if member is ctx.author:
             await ctx.send("You can't mute yourself", ephemeral=True)
             return
