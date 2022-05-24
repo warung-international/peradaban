@@ -83,11 +83,11 @@ class Moderation(Extension):
     async def slow_on(self, ctx: InteractionContext, timeout: int = 0):
         if timeout <= 0:
             return await ctx.send("Please specify how long should the slowmode be.")
-        
+
         if timeout >= 21600:
             await ctx.send("Slowmode can't be more than 6 hours.", ephemeral=True)
             return
-        
+
         await ctx.channel.edit(rate_limit_per_user=timeout)
         embed = Embed(
             description=f"<:check:839158727512293406> {ctx.channel.mention} is now in  *s l o w  m o t i o n*. Regular users can only post once every {timeout} seconds.\n\n(Suggestion: Type `/slowmode off` when you want to disable slowmode)",
@@ -340,7 +340,10 @@ class Moderation(Extension):
         reason: str = "No reason given",
     ):
         if (duration < 10) or (duration > 2419200):
-            await ctx.send("Mute time can't be shorter than 10 seconds and longer than 28 days.", ephemeral=True)
+            await ctx.send(
+                "Mute time can't be shorter than 10 seconds and longer than 28 days.",
+                ephemeral=True,
+            )
             return
         if member is ctx.author:
             await ctx.send("You can't mute yourself", ephemeral=True)
