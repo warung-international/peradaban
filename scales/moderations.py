@@ -305,9 +305,9 @@ class Moderation(Extension):
         return await ctx.send(embed=embed)
 
     @slash_command(
-        name="tempmute",
+        name="mute",
         sub_cmd_name="on",
-        sub_cmd_description="Temporarily mute a member from the server",
+        sub_cmd_description="Mute a member from the server",
     )
     @slash_option(
         name="member",
@@ -328,13 +328,15 @@ class Moderation(Extension):
         required=False,
     )
     @check(member_permissions(Permissions.MODERATE_MEMBERS))
-    async def tempmute(
+    async def mute(
         self,
         ctx: InteractionContext,
         member: OptionTypes.USER = None,
         duration: int = None,
         reason: str = "No reason given",
     ):
+        if duration <= 0:
+            await ctx.send("Duration must be greater than 0", ephemeral=True)
         if member is ctx.author:
             await ctx.send("You can't mute yourself", ephemeral=True)
             return
@@ -369,7 +371,7 @@ class Moderation(Extension):
 
         embed = Embed(description=f"**Reason:** {reason}")
         embed.set_author(
-            name=f"{member} has been temporarily muted", icon_url=member.avatar.url
+            name=f"{member} has been muted", icon_url=member.avatar.url
         )
         return await ctx.send(embed=embed)
 
