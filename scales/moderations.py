@@ -373,6 +373,67 @@ class Moderation(Extension):
         )
         return await ctx.send(embed=embed)
 
+    @slash_command(
+        name="mute",
+        sub_cmd_name="off",
+        sub_cmd_description="Unmute a member from the server",
+    )
+    @slash_option(
+        name="member",
+        description="The @member to unmute",
+        opt_type=OptionTypes.USER,
+        required=True,
+    )
+    @slash_option(
+        name="reason",
+        description="Reason of the mute",
+        opt_type=OptionTypes.STRING,
+        required=False,
+    )
+    @check(member_permissions(Permissions.MODERATE_MEMBERS))
+    async def unmute(
+        self,
+        ctx: InteractionContext,
+        member: OptionTypes.USER = None,
+        reason: str = "No reason given",
+    ):
+        if member is ctx.author:
+            await ctx.send("You can't unmute yourself", ephemeral=True)
+            return
+        if member.has_permission(Permissions.ADMINISTRATOR) == True:
+            await ctx.send("You can't unmute an admin", ephemeral=True)
+            return
+        elif member.has_permission(Permissions.BAN_MEMBERS) == True:
+            await ctx.send("You can't unmute users with ban perms", ephemeral=True)
+            return
+        elif member.has_permission(Permissions.MODERATE_MEMBERS) == True:
+            await ctx.send("You can't unmute users with timeout perms", ephemeral=True)
+            return
+
+        if ctx.author.top_role == member.top_role:
+            embed = Embed(
+                description=f":x: You can't unmute people with the same role as you!",
+                color=0xDD2222,
+            )
+            await ctx.send(embed=embed)
+            return
+
+        if ctx.author.top_role.position < member.top_role.position:
+            embed = Embed(
+                description=f":x: You can't unmute people with roles higher than yours!",
+                color=0xDD2222,
+            )
+            await ctx.send(embed=embed)
+            return
+
+        until_when = datetime.utcnow()
+        await member.timeout(until_when, reason)
+
+        embed = Embed(description=f"**Reason:** {reason}")
+        embed.set_author(
+            name=f"{member} has been unmuted", icon_url=member.avatar.url
+        )
+        return await ctx.send(embed=embed)
 
 def setup(bot):
     Moderation(bot)
