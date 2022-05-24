@@ -857,19 +857,19 @@ class events(Extension):
         rtc_text = await rtc_channel.fetch_message(rtc_msg)
 
         embed = Embed(
-            title=f"👋 Hi there, Welcome to **{server.name}** Discord Server.",
             description=f"{results}",
             color=0x3874FF,
         )
         embed.set_thumbnail(url=server.icon.url)
+        embed.set_footer("Click the button below to get @verified role")
         await rtc_text.edit(
             embed=embed,
             components=[
                 Button(
                     style=ButtonStyles.BLURPLE,
-                    label="Click here to take @verified role!",
+                    label="I accept this Server Rules",
                     custom_id="assign_role",
-                    emoji="<:WarungInternational:924928034388189234>",
+                    emoji="✅",
                 )
             ],
         )
