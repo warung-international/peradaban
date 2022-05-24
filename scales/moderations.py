@@ -82,7 +82,9 @@ class Moderation(Extension):
     @check(member_permissions(Permissions.MANAGE_MESSAGES))
     async def slow_on(self, ctx: InteractionContext, timeout: int = 0):
         if timeout <= 0:
-            return await ctx.send("Please specify how long should the slowmode be.", ephemeral=True)
+            return await ctx.send(
+                "Please specify how long should the slowmode be.", ephemeral=True
+            )
 
         if timeout >= 21600:
             await ctx.send("Slowmode can't be more than 6 hours.", ephemeral=True)
