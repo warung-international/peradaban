@@ -323,7 +323,7 @@ class events(Extension):
 
             embed = Embed(
                 color=0x2ECC71,
-                description=f"**Bot Joined**\n{member.mention} {member.name}#{member.discriminator}",
+                description=f"**Bot Joined**\n{member.mention} {member.username}#{member.discriminator}",
             )
             embed.set_author(
                 name=f"{member}",
@@ -393,9 +393,10 @@ class events(Extension):
         # send leave message
         leave_channelid = 968711470361772042
         leave_channel = event.guild.get_channel(leave_channelid)
-        await leave_channel.send(
-            f"**{member.username}#{member.discriminator}** just left the server"
-        )
+        if not member.bot:
+            await leave_channel.send(
+                f"**{member.username}#{member.discriminator}** just left the server"
+            )
 
     @listen()
     async def on_member_role_remove(self, event: MemberUpdate):
