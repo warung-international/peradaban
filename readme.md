@@ -24,3 +24,10 @@ To run the app, you need:
 - MongoDB Server, or MongoDB Atlas.
 
 If you don't own/admin a Discord server, creating one is simple, you can do it from the same menu you join discord servers from.
+
+## Awesome
+
+Awesome projects that i take reference from, credits to them all :3
+
+- [siren15/Melody](https://github.com/siren15/Melody)
+- [NAFTeam/Dis-Secretary](https://github.com/NAFTeam/Dis-Secretary)
