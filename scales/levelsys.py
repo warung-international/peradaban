@@ -165,7 +165,7 @@ class levellings(Extension):
         components = Button(
             style=ButtonStyles.URL,
             label="Go to your leaderboard",
-            url="https://lb.warunginternational.eu.org/",
+            url="https://warunginternational.eu.org/discord-leaderboard",
         )
 
         return await ctx.send("Here you go! 🧙‍♂️", components=components)
