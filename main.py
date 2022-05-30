@@ -70,7 +70,7 @@ for root, dirs, files in os.walk("scales"):
 
 
 @prefixed_command(name="load")
-@check(member_permissions(Permissions.ADMINISTRATOR))
+@check(is_owner())
 async def load(ctx: PrefixedContext, scale: str):
     client.load_extension(f"scales.{scale}")
     embed = Embed(
@@ -81,7 +81,7 @@ async def load(ctx: PrefixedContext, scale: str):
 
 
 @prefixed_command(name="unload")
-@check(member_permissions(Permissions.ADMINISTRATOR))
+@check(is_owner())
 async def unload(ctx: PrefixedContext, scale: str):
     client.unload_extension(f"scales.{scale}")
     embed = Embed(
@@ -92,7 +92,7 @@ async def unload(ctx: PrefixedContext, scale: str):
 
 
 @prefixed_command(name="reload")
-@check(member_permissions(Permissions.ADMINISTRATOR))
+@check(is_owner())
 async def reload(ctx: PrefixedContext, scale: str):
     client.reload_extension(f"scales.{scale}")
     embed = Embed(
@@ -108,7 +108,7 @@ def restart_program():
 
 
 @prefixed_command(name="reboot")
-@check(member_permissions(Permissions.ADMINISTRATOR))
+@check(is_owner())
 async def reboot(ctx: PrefixedContext):
     embed = Embed(
         description=f":wave: The bot has been Rebooting, Please Wait..",
@@ -119,7 +119,7 @@ async def reboot(ctx: PrefixedContext):
 
 
 @prefixed_command(name="shutdown")
-@check(member_permissions(Permissions.ADMINISTRATOR))
+@check(is_owner())
 async def shutdown(ctx: PrefixedContext):
     embed = Embed(
         description=f":wave: The bot has been Shutdowned, Goodbye World.",
