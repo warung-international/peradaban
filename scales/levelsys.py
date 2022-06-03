@@ -272,6 +272,7 @@ class levellings(Extension):
         await self.givexp(ctx, member, amount)
 
     @prefixed_command(name="removexp")
+    @check(member_permissions(Permissions.MANAGE_MESSAGES))
     async def pref_removexp(self, ctx, member: naff.Member, amount: int):
         await self.removexp(ctx, member, amount)
 
