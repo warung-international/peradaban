@@ -8,9 +8,20 @@ import aiohttp
 import naff
 from dotenv import load_dotenv
 from millify import millify
-from naff import (Button, ButtonStyles, Embed, Extension, OptionTypes,
-                  Permissions, PrefixedContext, check, listen,
-                  prefixed_command, slash_command, slash_option)
+from naff import (
+    Button,
+    ButtonStyles,
+    Embed,
+    Extension,
+    OptionTypes,
+    Permissions,
+    PrefixedContext,
+    check,
+    listen,
+    prefixed_command,
+    slash_command,
+    slash_option,
+)
 from naff.api.events.discord import MemberAdd, MemberRemove
 from PIL import Image, ImageDraw, ImageFont
 from pymongo import MongoClient
