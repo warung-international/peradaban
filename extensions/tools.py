@@ -7,20 +7,9 @@ import naff
 import requests
 import wget
 from dotenv import load_dotenv
-from naff import (
-    CommandTypes,
-    Embed,
-    Extension,
-    GuildCategory,
-    GuildText,
-    GuildVoice,
-    OptionTypes,
-    PrefixedContext,
-    context_menu,
-    prefixed_command,
-    slash_command,
-    slash_option,
-)
+from naff import (CommandTypes, Embed, Extension, GuildCategory, GuildText,
+                  GuildVoice, OptionTypes, PrefixedContext, context_menu,
+                  prefixed_command, slash_command, slash_option)
 
 load_dotenv()
 

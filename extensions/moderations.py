@@ -5,21 +5,9 @@ import re
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import *
-from naff import (
-    Client,
-    Embed,
-    Extension,
-    InteractionContext,
-    OptionTypes,
-    Permissions,
-    PrefixedContext,
-    SlashCommandChoice,
-    check,
-    listen,
-    prefixed_command,
-    slash_command,
-    slash_option,
-)
+from naff import (Client, Embed, Extension, InteractionContext, OptionTypes,
+                  Permissions, PrefixedContext, SlashCommandChoice, check,
+                  listen, prefixed_command, slash_command, slash_option)
 from naff.client.errors import NotFound
 from naff.ext.paginators import Paginator
 from naff.models.discord.base import DiscordObject

@@ -8,22 +8,10 @@ from datetime import datetime, timezone
 
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
-from naff import (
-    ActionRow,
-    AutocompleteContext,
-    Button,
-    ButtonStyles,
-    Client,
-    Embed,
-    Extension,
-    InteractionContext,
-    OptionTypes,
-    Permissions,
-    check,
-    slash_command,
-    slash_option,
-    spread_to_rows,
-)
+from naff import (ActionRow, AutocompleteContext, Button, ButtonStyles, Client,
+                  Embed, Extension, InteractionContext, OptionTypes,
+                  Permissions, check, slash_command, slash_option,
+                  spread_to_rows)
 from pymongo import MongoClient
 
 from utilities.catbox import CatBox as catbox
