@@ -4,7 +4,8 @@
 
 > OwO, What's this?
 
-Peradaban is a Discord Server Bots designed only for Warung International.
+Peradaban is a Discord Server Bots made with [NAFF](https://github.com/Discord-Snake-Pit/NAFF) designed only for Warung International.
+Visit [the official guide](https://naff.readthedocs.io/Guides/01%20Getting%20Started/) to get started.
 
 ## Development
 
@@ -24,6 +25,40 @@ To run the app, you need:
 - MongoDB Server, or MongoDB Atlas.
 
 If you don't own/admin a Discord server, creating one is simple, you can do it from the same menu you join discord servers from.
+
+## Running the Application
+There are multiple ways to launch the application.
+
+### Python
+To start the bot with python, you first need to install the required packages with `pip install -r requirements.txt`
+
+Then, run:
+
+1) `python main.py`
+
+
+### Docker-Compose
+You can use the pre-made docker-compose by running:
+
+1) `docker-compose up`
+
+### Docker
+For most users, the use of `docker-compose` is highly recommended.
+
+Nevertheless, you can import the pre-made Dockerfile into your own docker-compose or run it manually by with:
+
+1) `docker build -t your_project_name .`
+2) `docker run -it your_project_name`
+
+Note: Make sure that you created a volume so that you local `./logs` folder gets populated.
+
+# Additional Information
+Additionally, this comes with a pre-made [pre-commit](https://pre-commit.com) config to keep your code clean.
+
+It is recommended that you set this up by running:
+
+1) `pip install pre-commit`
+2) `pre-commit install`
 
 ## Awesome
 
