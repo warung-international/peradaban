@@ -52,7 +52,7 @@ Nevertheless, you can import the pre-made Dockerfile into your own docker-compos
 
 Note: Make sure that you created a volume so that you local `./logs` folder gets populated.
 
-# Additional Information
+## Additional Information
 Additionally, this comes with a pre-made [pre-commit](https://pre-commit.com) config to keep your code clean.
 
 It is recommended that you set this up by running:
