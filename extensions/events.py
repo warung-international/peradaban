@@ -795,6 +795,31 @@ class events(Extension):
                     f"The <@&{announce_role}> role has been added", ephemeral=True
                 )
 
+    @listen()
+    async def on_server_boost(self, event):
+        message = event.message
+
+        if message.type in [
+            USER_PREMIUM_GUILD_SUBSCRIPTION,
+            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1,
+            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2,
+            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3,
+        ]:
+            if event.guild.id == 922523614828433419:
+                embed = Embed(
+                    colour=0x7289DA,
+                    description=f"<:booster:914737485924409405> **{message.author.display_name}**, Terima Kasih sudah mem-boost server ini! :pray:",
+                )
+                embed.set_thumbnail(url=message.author.display_avatar)
+                embed.add_field(
+                    name="Boosted Since:",
+                    value=f"<t:{int(time.time())}:D> (**<t:{int(time.time())}:R>**)",
+                    inline=True,
+                )
+                embed.timestamp = datetime.datetime.utcnow()
+                general_chat = event.guild.get_channel(922523615377907715)
+                await general_chat.send(embed=embed)
+
 
 def setup(bot):
     # This is called by dis-snek so it knows how to load the Scale
