@@ -47,7 +47,7 @@ if __name__ == "__main__":
         default_prefix="!",
         asyncio_debug=False,  # Enable debug mode for asyncio
         debug_scope=922523614828433419,  # Override the commands scope, and only create them in this guild
-        status=Status.ONLINE,
+        status=Status.DO_NOT_DISTURB,  # set the bot's status
         activity=Activity(
             name="Selamat / Sukses ™️", type=ActivityType.COMPETING
         ),  # await client.change_presence(status=Status.IDLE, activity=Activity(name="test",type=ActivityType.STREAMING, url="https://www.twitch.tv/saiencevanadium"))
