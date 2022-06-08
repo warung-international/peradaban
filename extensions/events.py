@@ -735,36 +735,6 @@ class events(Extension):
                     )
                     os.remove(f"assets/welcome/welcomecard_{member.id}.png")
 
-                    # Logging new members crime record.
-                    stats = warning.find_one({"id": member.id})
-                    mutes = mute.find_one({"id": member.id})
-                    kicked = kicks.find_one({"id": member.id})
-                    if not member.bot:
-                        if stats is None:
-                            newuser = {
-                                "id": member.id,
-                                "warncount": None,
-                                "reason": None,
-                                "time": None,
-                            }
-                            warning.insert_one(newuser)
-                        if mutes is None:
-                            newuser = {
-                                "id": member.id,
-                                "mutecount": None,
-                                "reason": None,
-                                "time": None,
-                            }
-                            mute.insert_one(newuser)
-                        if kicked is None:
-                            newuser = {
-                                "id": member.id,
-                                "kickcount": None,
-                                "reason": None,
-                                "time": None,
-                            }
-                            kicks.insert_one(newuser)
-
     # ready events
     @listen()
     async def on_ready(self):
