@@ -13,6 +13,7 @@ from naff import (
     ButtonStyles,
     Embed,
     Extension,
+    MessageTypes,
     OptionTypes,
     Permissions,
     PrefixedContext,
@@ -495,8 +496,23 @@ class levellings(Extension):
     @listen()
     async def on_message_create(self, event):
         message = event.message
+
         # ignore someone
         if message.author.id == 532264079641935883:
+            return
+
+        # ignore some message types
+        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION:
+            return
+        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1:
+            return
+        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2:
+            return
+        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3:
+            return
+        if message.type.GUILD_MEMBER_JOIN:
+            return
+        if message.type.CHANNEL_PINNED_MESSAGE:
             return
 
         # ignore bot channels
