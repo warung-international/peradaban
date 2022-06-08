@@ -45,10 +45,6 @@ warning = cluster["dagelan"]["warning"]
 mute = cluster["dagelan"]["muted"]
 kicks = cluster["dagelan"]["kicks"]
 
-snippet_regex = re.compile(
-    r"github\.com/([\w\-_]+)/([\w\-_]+)/blob/([\w\-_]+)/([\w\-_/.]+)(#L[\d]+(-L[\d]+)?)?"
-)
-
 
 def snowflake_time(id: int) -> datetime:
     """
@@ -89,8 +85,6 @@ welcome_channel_id = 922527744061997106
 role_channel = 963656173087780865
 rtc_msg = 983919503127760906
 first_message = 983936794720608266
-
-repo = git_cli.get_repo("warung-international/peradaban")
 
 # read-this-channel
 gist = git_cli.get_gist(os.getenv("GIST_ID"))
