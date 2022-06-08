@@ -393,7 +393,7 @@ class Moderation(Extension):
                 f"Failed to send DM to {member}. They probably had their DM's closed."
             )
 
-        until_when = datetime.utcnow() + timedelta(seconds=duration)
+        until_when = datetime.datetime.utcnow() + timedelta(seconds=duration)
         await member.timeout(until_when, reason)
 
         embed = Embed(description=f"**Reason:** {reason}")
@@ -453,7 +453,7 @@ class Moderation(Extension):
             await ctx.send(embed=embed, ephemeral=True)
             return
 
-        until_when = datetime.utcnow()
+        until_when = datetime.datetime.utcnow()
         await member.timeout(until_when, reason)
 
         embed = Embed(description=f"**Reason:** {reason}")
