@@ -91,7 +91,7 @@ server_id = 922523614828433419
 rtc = 922527452574674984
 welcome_channel_id = 922527744061997106
 role_channel = 963656173087780865
-rtc_msg = 960572160236191824
+rtc_msg = 983919503127760906
 first_message = 965315542120542238
 second_message = 965315912897007618
 third_message = 965316061450883102
@@ -856,24 +856,7 @@ class events(Extension):
         # read-this channel
         rtc_channel = await server.fetch_channel(rtc)
         rtc_text = await rtc_channel.fetch_message(rtc_msg)
-
-        embed = Embed(
-            description=f"{results}",
-            color=0x3874FF,
-        )
-        embed.set_thumbnail(url=server.icon.url)
-        embed.set_footer("Click the button below to get @verified role")
-        await rtc_text.edit(
-            embed=embed,
-            components=[
-                Button(
-                    style=ButtonStyles.BLURPLE,
-                    label="I accept this Server Rules",
-                    custom_id="assign_role",
-                    emoji="✅",
-                )
-            ],
-        )
+        await rtc_text.edit(results)
 
     @listen()
     async def on_button(self, b):
