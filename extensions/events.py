@@ -92,9 +92,7 @@ rtc = 922527452574674984
 welcome_channel_id = 922527744061997106
 role_channel = 963656173087780865
 rtc_msg = 983919503127760906
-first_message = 965315542120542238
-second_message = 965315912897007618
-third_message = 965316061450883102
+first_message = 983936794720608266
 
 repo = git_cli.get_repo("warung-international/peradaban")
 
@@ -778,8 +776,6 @@ class events(Extension):
 
         channel = await server.fetch_channel(role_channel)
         first = await channel.fetch_message(first_message)
-        second = await channel.fetch_message(second_message)
-        third = await channel.fetch_message(third_message)
         info_embed = Embed(
             title="Role Info:", description=f"{results2}", color=0x3874FF
         )
@@ -787,71 +783,7 @@ class events(Extension):
             text=f"Press a button below to get a role!",
             icon_url="https://probot.media/luV8g6k4WT.gif",
         )
-        await first.edit(" ", embed=info_embed)
-        language: list[ActionRow] = [
-            ActionRow(
-                Button(
-                    custom_id="lang_en",
-                    style=ButtonStyles.PRIMARY,
-                    label="English",
-                    emoji="🇺🇸",
-                ),
-                Button(
-                    custom_id="lang_id",
-                    style=ButtonStyles.PRIMARY,
-                    label="Bahasa Indonesia",
-                    emoji="🇮🇩",
-                ),
-            )
-        ]
-        lang_embed = Embed(
-            title="What languages do you speak?/Bahasa apa yang anda pakai sehari-hari?",
-            description="*Is there any other language you'd like me to add? Please let me know.*",
-            color=0x3874FF,
-        )
-        lang_embed.add_field(
-            name=":one: English",
-            value="For those who are using English Language [Not Color Coded]",
-            inline=False,
-        )
-        lang_embed.add_field(
-            name=":two: Bahasa Indonesia",
-            value="Bagi kalian yang menggunakan Bahasa Indonesia [Tidak ada Warna Role]",
-            inline=False,
-        )
-        await second.edit(content="", embed=lang_embed, components=language)
-
-        ping: list[ActionRow] = [
-            ActionRow(
-                Button(
-                    custom_id="ping_events",
-                    style=ButtonStyles.DANGER,
-                    label="Event Pings",
-                    emoji="<a:Vibing:924867878946209803>",
-                ),
-                Button(
-                    custom_id="ping_announcements",
-                    style=ButtonStyles.DANGER,
-                    label="Announcement Pings",
-                    emoji="🔊",
-                ),
-            )
-        ]
-        ping_embed = Embed(
-            title="What notifications do you want to receive?/Notifikasi apa yang ingin anda terima?",
-            color=0x3874FF,
-        )
-        ping_embed.add_field(
-            name=":one: Event Pings",
-            value="We will notify you when there's a new events. [Not Color Coded]\nAnda akan di beri tahu jika ada event baru. [Tidak ada Warna Role]",
-            inline=False,
-        )
-        ping_embed.add_field(
-            name=":two: Announcement Pings",
-            value="We will notify you when an announcements posted. [Not Color Coded]\nAnda akan di beri tahu jika ada pemberitahuan yang dibuat. [Tidak ada Warna Role]",
-            inline=False,
-        )
-        await third.edit(content="", embed=ping_embed, components=ping)
+        await first.edit(embed=info_embed)
 
         # read-this channel
         rtc_channel = await server.fetch_channel(rtc)
