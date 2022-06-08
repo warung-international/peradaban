@@ -1,3 +1,4 @@
+import datetime
 import re
 from typing import Awaitable, Callable, Union
 
@@ -59,3 +60,54 @@ def is_owner():
         return ctx.author.id == 351150966948757504
 
     return check
+
+
+def snowflake_time(id: int) -> datetime.datetime:
+    """
+    Parameters
+    -----------
+    id: :class:`int`
+        The snowflake ID.
+    Returns
+    --------
+    :class:`datetime.datetime`
+        An aware datetime in UTC representing the creation time of the snowflake.
+    """
+    timestamp = ((id >> 22) + 1420070400000) / 1000
+    return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+
+
+def date_diff_in_Seconds(dt2, dt1):
+    """
+    Parameters
+    -----------
+    dt2: :class:`int`
+        End time.
+    dt1: :class:`int`
+        Current time.
+    Returns
+    --------
+    :class:`timedelta.datetime`
+        The time differs.
+    """
+    timedelta = dt2 - dt1
+    return timedelta.days * 24 * 3600 + timedelta.seconds
+
+
+def geturl(string):
+    """
+    Parameters
+    -----------
+    dt2: :class:`string`
+        The attachment link.
+    Returns
+    --------
+    :class:`url`
+    """
+    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    url = re.findall(regex, string)
+    url_2 = [x[0] for x in url]
+    if url_2 != []:
+        for url in url_2:
+            return url
+    return None

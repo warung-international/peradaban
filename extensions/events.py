@@ -36,6 +36,8 @@ from naff.api.events.discord import (
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pymongo import MongoClient
 
+from utilities.checks import *
+
 load_dotenv()
 
 cluster = MongoClient(os.getenv("MONGODB_URL"))
@@ -44,36 +46,6 @@ levelling = cluster["dagelan"]["levelling"]
 warning = cluster["dagelan"]["warning"]
 mute = cluster["dagelan"]["muted"]
 kicks = cluster["dagelan"]["kicks"]
-
-
-def snowflake_time(id: int) -> datetime:
-    """
-    Parameters
-    -----------
-    id: :class:`int`
-        The snowflake ID.
-    Returns
-    --------
-    :class:`datetime.datetime`
-        An aware datetime in UTC representing the creation time of the snowflake.
-    """
-    timestamp = ((id >> 22) + 1420070400000) / 1000
-    return datetime.fromtimestamp(timestamp, tz=timezone.utc)
-
-
-def date_diff_in_Seconds(dt2, dt1):
-    timedelta = dt2 - dt1
-    return timedelta.days * 24 * 3600 + timedelta.seconds
-
-
-def geturl(string):
-    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-    url = re.findall(regex, string)
-    url_2 = [x[0] for x in url]
-    if url_2 != []:
-        for url in url_2:
-            return url
-    return None
 
 
 # some universal variables
