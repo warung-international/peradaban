@@ -7,7 +7,7 @@ import re
 import textwrap
 import time
 import traceback
-from datetime import datetime, timezone
+import datetime
 from pathlib import Path
 
 import aiohttp
@@ -96,7 +96,7 @@ class events(Extension):
 
                     embed = Embed(
                         description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.set_author(
@@ -124,7 +124,7 @@ class events(Extension):
 
                     embed = Embed(
                         description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.set_author(
@@ -154,7 +154,7 @@ class events(Extension):
             if geturl(message.content) is None:
                 embed = Embed(
                     description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                    timestamp=datetime.utcnow(),
+                    timestamp=datetime.datetime.utcnow(),
                     color=0xE74C3C,
                 )
                 embed.set_author(
@@ -193,7 +193,7 @@ class events(Extension):
 
                     embed = Embed(
                         description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.set_author(
@@ -215,7 +215,7 @@ class events(Extension):
                 else:
                     embed = Embed(
                         description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.set_author(
@@ -249,7 +249,7 @@ class events(Extension):
 
         embed = Embed(
             description=f"**Message Edited in <#{before.channel.id}> <t:{int(time.time())}:R>**",
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.datetime.utcnow(),
             color=0x1F8B4C,
         )
         embed.set_author(
@@ -306,7 +306,7 @@ class events(Extension):
 
             embed = Embed(
                 description=f"**Member Joined**\n{member.mention} {member}",
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.datetime.utcnow(),
                 color=0x2ECC71,
             )
             embed.set_author(
@@ -336,7 +336,7 @@ class events(Extension):
         channelid = 960731844066807838
         log_channel = event.guild.get_channel(channelid)
         embed = Embed(
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.datetime.utcnow(),
             color=0xE74C3C,
         )
         embed.add_field(
@@ -455,8 +455,8 @@ class events(Extension):
             for au_entry in audit_log_entry.entries:
                 entry_created_at = snowflake_time(au_entry.id)
                 cdiff = date_diff_in_Seconds(
-                    datetime.now(tz=timezone.utc),
-                    entry_created_at.replace(tzinfo=timezone.utc),
+                    datetime.now(tz=datetime.timezone.utc),
+                    entry_created_at.replace(tzinfo=datetime.timezone.utc),
                 )
                 if cdiff <= 60:
                     reason = au_entry.reason
@@ -471,7 +471,7 @@ class events(Extension):
                         embed = Embed(
                             description=f"{target} **was unmuted**\n\n**Reason:**\n```md\n{reason}\n```\n**User ID:** {target.id}\n**Actioned by:** {moderator}",
                             color=0x0C73D3,
-                            timestamp=datetime.utcnow(),
+                            timestamp=datetime.datetime.utcnow(),
                         )
                         embed.set_thumbnail(url=target.avatar.url)
 
@@ -488,14 +488,14 @@ class events(Extension):
             )
             timeout_timestamp = timeout_timestamp.replace(">", "")
             timeout_timestamp = int(timeout_timestamp)
-            dt = datetime.fromtimestamp(timeout_timestamp)
-            dt = dt.replace(tzinfo=timezone.utc)
+            dt = datetime.datetime.fromtimestamp(timeout_timestamp)
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
             audit_log_entry = await event.guild.fetch_audit_log(action_type=24, limit=1)
             for au_entry in audit_log_entry.entries:
                 entry_created_at = snowflake_time(au_entry.id)
                 cdiff = date_diff_in_Seconds(
-                    datetime.now(tz=timezone.utc),
-                    entry_created_at.replace(tzinfo=timezone.utc),
+                    datetime.now(tz=datetime.timezone.utc),
+                    entry_created_at.replace(tzinfo=datetime.timezone.utc),
                 )
                 if cdiff <= 60:
                     reason = au_entry.reason
@@ -506,7 +506,7 @@ class events(Extension):
                             moderator = au_user
             if target.id == member_after.id:
                 if (member_after.communication_disabled_until is not None) and (
-                    dt > datetime.now(tz=timezone.utc)
+                    dt > datetime.now(tz=datetime.timezone.utc)
                 ):
                     mute_time = f"{member_after.communication_disabled_until}".replace(
                         ">", ":R>"
@@ -516,7 +516,7 @@ class events(Extension):
                     embed = Embed(
                         description=f"{target} **was muted** \n\n**Reason:**\n```md\n{reason}\n```\n**User ID:** {target.id}\n**Actioned by:** {moderator}\n**End time:** {mute_time}",
                         color=0x0C73D3,
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                     )
                     embed.set_thumbnail(url=target.avatar.url)
                     channelid = 960731844066807838
@@ -530,8 +530,8 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=timezone.utc),
-                entry_created_at.replace(tzinfo=timezone.utc),
+                datetime.now(tz=datetime.timezone.utc),
+                entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
                 reason = au_entry.reason
@@ -544,7 +544,7 @@ class events(Extension):
                     channelid = 960731844066807838
                     log_channel = event.guild.get_channel(channelid)
                     embed = Embed(
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.add_field(
@@ -564,8 +564,8 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=timezone.utc),
-                entry_created_at.replace(tzinfo=timezone.utc),
+                datetime.now(tz=datetime.timezone.utc),
+                entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
                 reason = au_entry.reason
@@ -578,7 +578,7 @@ class events(Extension):
                     channelid = 960731844066807838
                     log_channel = guild.get_channel(channelid)
                     embed = Embed(
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.add_field(
@@ -598,8 +598,8 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=timezone.utc),
-                entry_created_at.replace(tzinfo=timezone.utc),
+                datetime.now(tz=datetime.timezone.utc),
+                entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
                 reason = au_entry.reason
@@ -613,7 +613,7 @@ class events(Extension):
                     log_channel = guild.get_channel(channelid)
 
                     embed = Embed(
-                        timestamp=datetime.utcnow(),
+                        timestamp=datetime.datetime.utcnow(),
                         color=0xE74C3C,
                     )
                     embed.add_field(
