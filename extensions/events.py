@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import logging
 import math
 import os
@@ -7,7 +8,6 @@ import re
 import textwrap
 import time
 import traceback
-import datetime
 from pathlib import Path
 
 import aiohttp
@@ -296,7 +296,7 @@ class events(Extension):
                 inline=False,
             )
             embed.set_footer(text=f"ID: {member.id}")
-            embed.timestamp = datetime.utcnow()
+            embed.timestamp = datetime.datetime.utcnow()
             await log_channel.send(embed=embed)
         else:
             channelid = 960731844066807838
@@ -319,7 +319,7 @@ class events(Extension):
                 value=f"<t:{int(member.created_at.timestamp())}:F> (<t:{int(member.created_at.timestamp())}:R>)",
                 inline=False,
             )
-            embed.timestamp = datetime.utcnow()
+            embed.timestamp = datetime.datetime.utcnow()
             embed.set_footer(text=f"ID: {member.id}")
             await log_channel.send(embed=embed)
 
@@ -347,7 +347,7 @@ class events(Extension):
         embed.set_thumbnail(url=member.avatar.url)
         embed.add_field(name=f"Roles:", value=roles)
         embed.set_footer(text=f"ID: {member.id}")
-        embed.timestamp = datetime.utcnow()
+        embed.timestamp = datetime.datetime.utcnow()
         await log_channel.send(embed=embed)
 
         # send leave message
@@ -379,7 +379,7 @@ class events(Extension):
                 url=f"https://discord.com/users/{member.id}",
             )
             embed.set_footer(text=f"ID: {member.id}")
-            embed.timestamp = datetime.utcnow()
+            embed.timestamp = datetime.datetime.utcnow()
             channelid = 960731844066807838
             log_channel = event.guild.get_channel(channelid)
             await log_channel.send(embed=embed)
@@ -405,7 +405,7 @@ class events(Extension):
                 url=f"https://discord.com/users/{member.id}",
             )
             embed.set_footer(text=f"ID: {member.id}")
-            embed.timestamp = datetime.utcnow()
+            embed.timestamp = datetime.datetime.utcnow()
             channelid = 960731844066807838
             log_channel = event.guild.get_channel(channelid)
             await log_channel.send(embed=embed)
@@ -442,7 +442,7 @@ class events(Extension):
                 url=f"https://discord.com/users/{member.id}",
             )
             embed.set_footer(text=f"ID: {member.id}")
-            embed.timestamp = datetime.utcnow()
+            embed.timestamp = datetime.datetime.utcnow()
             channelid = 960731844066807838
             log_channel = event.guild.get_channel(channelid)
             await log_channel.send(embed=embed)
