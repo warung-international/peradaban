@@ -1,8 +1,10 @@
 aiohttp
 algoliasearch
 dnspython
+item
 millify
 naff
+naff_audio
 orjson
 pillow
 pygithub
@@ -11,4 +13,3 @@ python-dateutil
 python-dotenv
 sentry-sdk
 wget
-yt-dlp

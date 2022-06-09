@@ -47,8 +47,8 @@ For most users, the use of `docker-compose` is highly recommended.
 
 Nevertheless, you can import the pre-made Dockerfile into your own docker-compose or run it manually by with:
 
-1) `docker build -t your_project_name .`
-2) `docker run -it your_project_name`
+1) `docker build -t peradaban .`
+2) `docker run -it peradaban`
 
 Note: Make sure that you created a volume so that you local `./logs` folder gets populated.
 
