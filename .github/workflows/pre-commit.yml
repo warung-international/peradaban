@@ -1,5 +1,5 @@
 name: precommit-action
-on: [pull_request]
+on: [push, pull_request]
 jobs:
   linter_name:
     name: runner / Pre-commit actions
@@ -16,5 +16,12 @@ jobs:
         run: |
           pip install pre-commit
       - name: Run Pre-commit
+        id: precommit
+        continue-on-error: true
         run: |
           pre-commit run --all-files
+      - name: Upload modified files (if any)
+        if: steps.precommit.outcome == 'failure'
+        run: |
+          git commit -m "chore: pre-commit fixes" . 
+          git push origin master
