@@ -487,17 +487,17 @@ class levellings(Extension):
             return
 
         # ignore some message types
-        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION:
+        if message.type == 8:
             return
-        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1:
+        if message.type == 9:
             return
-        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2:
+        if message.type == 10:
             return
-        if message.type.USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3:
+        if message.type == 11:
             return
-        if message.type.GUILD_MEMBER_JOIN:
+        if message.type == 7:
             return
-        if message.type.CHANNEL_PINNED_MESSAGE:
+        if message.type == 6:
             return
 
         # ignore bot channels

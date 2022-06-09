@@ -33,6 +33,7 @@ from naff.api.events.discord import (
     MemberUpdate,
     MessageCreate,
     MessageDelete,
+    MessageUpdate,
 )
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pymongo import MongoClient
@@ -238,7 +239,7 @@ class events(Extension):
                     return await log_channel.send(embed=embed)
 
     @listen()
-    async def on_message_update(self, event: MessageCreate):
+    async def on_message_update(self, event: MessageUpdate):
         if event.before is None:
             return
         before = event.before
@@ -800,12 +801,7 @@ class events(Extension):
     async def on_server_boost(self, event: MessageCreate):
         message = event.message
 
-        if message.type in [
-            USER_PREMIUM_GUILD_SUBSCRIPTION,
-            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_1,
-            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_2,
-            USER_PREMIUM_GUILD_SUBSCRIPTION_TIER_3,
-        ]:
+        if message.type in [8, 9, 10, 11]:
             if event.guild.id == 922523614828433419:
                 embed = Embed(
                     colour=0x7289DA,
