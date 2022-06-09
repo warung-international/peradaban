@@ -3,7 +3,7 @@ algoliasearch
 dnspython
 item
 millify
-naff
+naff[voice]
 naff_audio
 orjson
 pillow
