@@ -3,6 +3,7 @@ algoliasearch
 dnspython
 millify
 naff
+naff_audio
 orjson
 pillow
 pygithub
@@ -11,4 +12,3 @@ python-dateutil
 python-dotenv
 sentry-sdk
 wget
-naff_audio
