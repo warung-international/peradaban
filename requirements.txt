@@ -12,3 +12,4 @@ python-dateutil
 python-dotenv
 sentry-sdk
 wget
+item
