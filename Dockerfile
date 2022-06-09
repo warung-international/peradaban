@@ -1,7 +1,7 @@
 FROM python:latest
 
 # install ffmpeg for audio streams
-RUN sudo apt install ffmpeg
+RUN apt install ffmpeg
 
 # we want stdout
 ENV PYTHONDONTWRITEBYTECODE=1
