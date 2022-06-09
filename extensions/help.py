@@ -1,15 +1,8 @@
 import datetime
 
 from algoliasearch.search_client import SearchClient
-from naff import (
-    Embed,
-    Extension,
-    OptionTypes,
-    PrefixedContext,
-    prefixed_command,
-    slash_command,
-    slash_option,
-)
+from naff import (Embed, Extension, OptionTypes, PrefixedContext,
+                  prefixed_command, slash_command, slash_option)
 
 
 class help(Extension):

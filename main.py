@@ -3,17 +3,8 @@ import sys
 
 import sentry_sdk
 from dotenv import load_dotenv
-from naff import (
-    Activity,
-    ActivityType,
-    Embed,
-    Intents,
-    PrefixedContext,
-    Status,
-    check,
-    listen,
-    prefixed_command,
-)
+from naff import (Activity, ActivityType, Embed, Intents, PrefixedContext,
+                  Status, check, listen, prefixed_command)
 from naff.ext.debug_extension import DebugExtension
 
 from core.base import CustomClient
