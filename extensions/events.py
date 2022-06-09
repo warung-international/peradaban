@@ -31,6 +31,7 @@ from naff.api.events.discord import (
     MemberAdd,
     MemberRemove,
     MemberUpdate,
+    MessageCreate,
     MessageDelete,
 )
 from PIL import Image, ImageDraw, ImageFont, ImageOps
@@ -237,7 +238,7 @@ class events(Extension):
                     return await log_channel.send(embed=embed)
 
     @listen()
-    async def on_message_update(self, event):
+    async def on_message_update(self, event: MessageCreate):
         if event.before is None:
             return
         before = event.before
@@ -796,7 +797,7 @@ class events(Extension):
                 )
 
     @listen()
-    async def on_server_boost(self, event):
+    async def on_server_boost(self, event: MessageCreate):
         message = event.message
 
         if message.type in [

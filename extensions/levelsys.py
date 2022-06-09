@@ -23,7 +23,7 @@ from naff import (
     slash_command,
     slash_option,
 )
-from naff.api.events.discord import MemberAdd, MemberRemove
+from naff.api.events.discord import MemberAdd, MemberRemove, MessageCreate
 from PIL import Image, ImageDraw, ImageFont
 from pymongo import MongoClient
 
@@ -479,7 +479,7 @@ class levellings(Extension):
                 await message.author.add_role(new_role)
 
     @listen()
-    async def on_message_create(self, event):
+    async def on_message_create(self, event: MessageCreate):
         message = event.message
 
         # ignore someone
