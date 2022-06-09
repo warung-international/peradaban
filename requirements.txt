@@ -1,8 +1,8 @@
 aiohttp
 algoliasearch
 dnspython
-git+https://github.com/Discord-Snake-Pit/NAFF.git@dev
 millify
+naff
 orjson
 pillow
 pygithub
