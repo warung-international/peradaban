@@ -303,25 +303,10 @@ class levellings(Extension):
 
         if not member.bot:
             stats = levelling.find_one({"id": member.id})
-            if stats is None:
-                newuserxp = 0
-                newuser = {
-                    "id": member.id,
-                    "xp": newuserxp,
-                    "username": member.username,
-                    "discrim": member.discriminator,
-                    "messagecount": 0,
-                    "image_url": str(member.avatar.url),
-                    "level": 0,
-                    "formatxp": f"{millify(newuserxp)}",
-                    "formatmessage": f"{millify(0)}",
-                    "displayname": member.display_name,
-                    "last_message": f"{datetime.datetime.utcnow().isoformat()}",
-                }
-                levelling.insert_one(newuser)
-            else:
+            if stats is not None:
+                levelling.delete_one({"id": member.id})
                 logging.info(
-                    f"{member.display_name} has joined the server and they are in database, resuming..."
+                    f"{member.display_name} has joined the server and they are in database, resetting their stats..."
                 )
 
     @listen()
