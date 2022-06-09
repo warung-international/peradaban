@@ -1,7 +1,7 @@
 FROM python:latest
 
 # install ffmpeg for audio streams
-RUN apt update && apt upgrade && apt install ffmpeg
+RUN apt-get update && apt-get upgrade -y && apt-get install -y ffmpeg
 
 # we want stdout
 ENV PYTHONDONTWRITEBYTECODE=1
