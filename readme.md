@@ -21,7 +21,7 @@ To run the app, you need:
 
 - A Discord server to test - you can't use the Warung International Discord Server to do tests
 - Python 3.1x.x - no guarantees on older versions
-- A Discord bot with the 'Server Members Intent' enabled
+- A Discord bot with the 'Server Members Intent' and 'Presence Intent' enabled
 - MongoDB Server, or MongoDB Atlas.
 
 If you don't own/admin a Discord server, creating one is simple, you can do it from the same menu you join discord servers from.
