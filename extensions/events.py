@@ -15,10 +15,24 @@ import github.GithubException
 import requests
 from dotenv import load_dotenv
 from github import Github
-from naff import (ActionRow, Button, ButtonStyles, ComponentContext, Embed,
-                  Extension, check, listen)
-from naff.api.events.discord import (BanCreate, BanRemove, MemberAdd,
-                                     MemberRemove, MemberUpdate, MessageDelete)
+from naff import (
+    ActionRow,
+    Button,
+    ButtonStyles,
+    ComponentContext,
+    Embed,
+    Extension,
+    check,
+    listen,
+)
+from naff.api.events.discord import (
+    BanCreate,
+    BanRemove,
+    MemberAdd,
+    MemberRemove,
+    MemberUpdate,
+    MessageDelete,
+)
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pymongo import MongoClient
 
