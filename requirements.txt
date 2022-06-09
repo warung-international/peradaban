@@ -1,6 +1,7 @@
 aiohttp
 algoliasearch
 dnspython
+item
 millify
 naff
 naff_audio
@@ -12,4 +13,3 @@ python-dateutil
 python-dotenv
 sentry-sdk
 wget
-item
