@@ -23,7 +23,7 @@ jobs:
       - name: Upload modified files (if any)
         if: steps.precommit.outcome == 'failure'
         run: |
-          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.name ${GITHUB_ACTOR}
           git config --global user.email ${{ secrets.USER_EMAIL }}
           git commit -m "chore: pre-commit fixes" . 
           git push origin master
