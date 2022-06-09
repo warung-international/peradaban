@@ -74,7 +74,7 @@ def snowflake_time(id: int) -> datetime.datetime:
         An aware datetime in UTC representing the creation time of the snowflake.
     """
     timestamp = ((id >> 22) + 1420070400000) / 1000
-    return datetime.datetime.fromtimestamp(timestamp, tz=timezone.utc)
+    return datetime.datetime.fromtimestamp(timestamp, tz=datetime.timezone.utc)
 
 
 def date_diff_in_Seconds(dt2, dt1):
