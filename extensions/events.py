@@ -78,165 +78,39 @@ welcome_msg = welcomer.raw_data["content"]
 
 class events(Extension):
     @listen()
-    async def on_message_delete_attachments(self, event: MessageDelete):
+    async def on_message_delete(self, event: MessageDelete):
         message = event.message
         if message.author.bot:
             return
-        if message.attachments:
-            for file in message.attachments:
-                if (
-                    file.filename.endswith(".jpg")
-                    or file.filename.endswith(".jpeg")
-                    or file.filename.endswith(".png")
-                    or file.filename.endswith(".gif")
-                ):
-                    url = file.proxy_url
-                    if message.content == "":
-                        content = "[No written message content]"
-                    else:
-                        content = message.content
+        embed = Embed(
+            description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
+            timestamp=datetime.datetime.utcnow(),
+            color=0xE74C3C,
+        )
+        embed.set_author(
+            name=f"{message.author.username}#{message.author.discriminator}",
+            icon_url=message.author.avatar.url,
+            url=f"https://discord.com/users/{message.author.id}",
+        )
 
-                    embed = Embed(
-                        description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.datetime.utcnow(),
-                        color=0xE74C3C,
-                    )
-                    embed.set_author(
-                        name=f"{message.author.username}#{message.author.discriminator}",
-                        icon_url=message.author.avatar.url,
-                        url=f"https://discord.com/users/{message.author.id}",
-                    )
-                    embed.add_field(name="Message:", value=f"{content}", inline=False)
-                    embed.set_image(url=f"{url}")
-                    embed.set_footer(
-                        text=f"Author: {message.author.id} • Message ID: {message.id}"
-                    )
+        content = message.content or "[No written message content]"
 
-                    channelid = 960731844066807838
+        if len(content) > 1020:
+            content = content[:1020] + "..."
 
-                    server = self.bot.get_guild(server_id)
-                    log_channel = server.get_channel(channelid)
-                    return await log_channel.send(embed=embed)
-                else:
-                    url = file.proxy_url
-                    if message.content == "":
-                        content = "[No written message content]"
-                    else:
-                        content = message.content
+        embed.add_field(name="Message:", value=f"{content}", inline=False)
 
-                    embed = Embed(
-                        description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.datetime.utcnow(),
-                        color=0xE74C3C,
-                    )
-                    embed.set_author(
-                        name=f"{message.author.username}#{message.author.discriminator}",
-                        icon_url=message.author.avatar.url,
-                        url=f"https://discord.com/users/{message.author.id}",
-                    )
-                    embed.add_field(
-                        name="Message:", value=f"{content}\n\n{url}", inline=False
-                    )
-                    embed.set_footer(
-                        text=f"Author: {message.author.id} • Message ID: {message.id}"
-                    )
+        if message.embeds and (count := len(message.embeds)) > 0:
+            embed.add_field(name="# Embeds", value=str(count), inline=True)
 
-                    channelid = 960731844066807838
+        if message.attachments and (count := len(message.attachments)) > 0:
+            embed.add_field(name="# Attachments", value=str(count), inline=True)
 
-                    server = self.bot.get_guild(server_id)
-                    log_channel = server.get_channel(channelid)
-                    return await log_channel.send(embed=embed)
-
-    @listen()
-    async def on_message_delete_regular(self, event: MessageDelete):
-        message = event.message
-        if message.author.bot:
-            return
-        if not message.attachments:
-            if geturl(message.content) is None:
-                embed = Embed(
-                    description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                    timestamp=datetime.datetime.utcnow(),
-                    color=0xE74C3C,
-                )
-                embed.set_author(
-                    name=f"{message.author.username}#{message.author.discriminator}",
-                    icon_url=message.author.avatar.url,
-                    url=f"https://discord.com/users/{message.author.id}",
-                )
-                embed.add_field(name="Message:", value=message.content, inline=False)
-                embed.set_footer(
-                    text=f"Author: {message.author.id} • Message ID: {message.id}"
-                )
-
-                channelid = 960731844066807838
-
-                server = self.bot.get_guild(server_id)
-                log_channel = server.get_channel(channelid)
-                await log_channel.send(embed=embed)
-
-    @listen()
-    async def on_message_delete_url(self, event: MessageDelete):
-        message = event.message
-        if message.author.bot:
-            return
-        if not message.attachments:
-            if geturl(message.content) is not None:
-                url = geturl(message.content)
-                if (
-                    url.endswith(".jpg")
-                    or url.endswith(".jpeg")
-                    or url.endswith(".png")
-                    or url.endswith(".gif")
-                ):
-                    content = message.content.replace(f"{url}", "")
-                    if content == "":
-                        content = "[No written message content]"
-
-                    embed = Embed(
-                        description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.datetime.utcnow(),
-                        color=0xE74C3C,
-                    )
-                    embed.set_author(
-                        name=f"{message.author.username}#{message.author.discriminator}",
-                        icon_url=message.author.avatar.url,
-                        url=f"https://discord.com/users/{message.author.id}",
-                    )
-                    embed.add_field(name="Message:", value=content, inline=False)
-                    embed.set_image(url=url)
-                    embed.set_footer(
-                        text=f"Author: {message.author.id} • Message ID: {message.id}"
-                    )
-
-                    channelid = 960731844066807838
-
-                    server = self.bot.get_guild(server_id)
-                    log_channel = server.get_channel(channelid)
-                    return await log_channel.send(embed=embed)
-                else:
-                    embed = Embed(
-                        description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                        timestamp=datetime.datetime.utcnow(),
-                        color=0xE74C3C,
-                    )
-                    embed.set_author(
-                        name=f"{message.author.username}#{message.author.discriminator}",
-                        icon_url=message.author.avatar.url,
-                        url=f"https://discord.com/users/{message.author.id}",
-                    )
-                    embed.add_field(
-                        name="Message:", value=message.content, inline=False
-                    )
-                    embed.set_footer(
-                        text=f"Author: {message.author.id} • Message ID: {message.id}"
-                    )
-
-                    channelid = 960731844066807838
-
-                    server = self.bot.get_guild(server_id)
-                    log_channel = server.get_channel(channelid)
-                    return await log_channel.send(embed=embed)
+        embed.set_footer(text=f"Author: {message.author.id} • Message ID: {message.id}")
+        channelid = 960731844066807838
+        server = self.bot.get_guild(server_id)
+        log_channel = server.get_channel(channelid)
+        return await log_channel.send(embed=embed)
 
     @listen()
     async def on_message_update(self, event: MessageUpdate):
