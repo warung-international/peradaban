@@ -331,7 +331,7 @@ class events(Extension):
             for au_entry in audit_log_entry.entries:
                 entry_created_at = snowflake_time(au_entry.id)
                 cdiff = date_diff_in_Seconds(
-                    datetime.now(tz=datetime.timezone.utc),
+                    datetime.datetime.now(tz=datetime.timezone.utc),
                     entry_created_at.replace(tzinfo=datetime.timezone.utc),
                 )
                 if cdiff <= 60:
@@ -370,7 +370,7 @@ class events(Extension):
             for au_entry in audit_log_entry.entries:
                 entry_created_at = snowflake_time(au_entry.id)
                 cdiff = date_diff_in_Seconds(
-                    datetime.now(tz=datetime.timezone.utc),
+                    datetime.datetime.now(tz=datetime.timezone.utc),
                     entry_created_at.replace(tzinfo=datetime.timezone.utc),
                 )
                 if cdiff <= 60:
@@ -382,7 +382,7 @@ class events(Extension):
                             moderator = au_user
             if target.id == member_after.id:
                 if (member_after.communication_disabled_until is not None) and (
-                    dt > datetime.now(tz=datetime.timezone.utc)
+                    dt > datetime.datetime.now(tz=datetime.timezone.utc)
                 ):
                     mute_time = f"{member_after.communication_disabled_until}".replace(
                         ">", ":R>"
@@ -406,7 +406,7 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=datetime.timezone.utc),
+                datetime.datetime.now(tz=datetime.timezone.utc),
                 entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
@@ -440,7 +440,7 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=datetime.timezone.utc),
+                datetime.datetime.now(tz=datetime.timezone.utc),
                 entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
@@ -474,7 +474,7 @@ class events(Extension):
         for au_entry in audit_log_entry.entries:
             entry_created_at = snowflake_time(au_entry.id)
             cdiff = date_diff_in_Seconds(
-                datetime.now(tz=datetime.timezone.utc),
+                datetime.datetime.now(tz=datetime.timezone.utc),
                 entry_created_at.replace(tzinfo=datetime.timezone.utc),
             )
             if cdiff <= 300:
