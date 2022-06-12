@@ -676,20 +676,19 @@ class events(Extension):
         message = event.message
 
         if message.type in [8, 9, 10, 11]:
-            if event.guild.id == 922523614828433419:
-                embed = Embed(
-                    colour=0x7289DA,
-                    description=f"<:booster:914737485924409405> **{message.author.display_name}**, Terima Kasih sudah mem-boost server ini! :pray:",
-                )
-                embed.set_thumbnail(url=message.author.display_avatar)
-                embed.add_field(
-                    name="Boosted Since:",
-                    value=f"<t:{int(time.time())}:D> (**<t:{int(time.time())}:R>**)",
-                    inline=True,
-                )
-                embed.timestamp = datetime.datetime.utcnow()
-                general_chat = event.guild.get_channel(922523615377907715)
-                await general_chat.send(embed=embed)
+            embed = Embed(
+                colour=0x7289DA,
+                description=f"<:booster:914737485924409405> **{message.author.display_name}**, Terima Kasih sudah mem-boost server ini! :pray:",
+            )
+            embed.set_thumbnail(url=message.author.display_avatar)
+            embed.add_field(
+                name="Boosted Since:",
+                value=f"<t:{int(time.time())}:D> (**<t:{int(time.time())}:R>**)",
+                inline=True,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+            general_chat = event.guild.get_channel(922523615377907715)
+            await general_chat.send(embed=embed)
 
 
 def setup(bot):
