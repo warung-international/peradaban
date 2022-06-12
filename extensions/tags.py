@@ -4,7 +4,8 @@ import asyncio
 import math
 import os
 import re
-from datetime import datetime, timezone
+import datetime
+from datetime import timezone
 
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
@@ -130,7 +131,7 @@ class Tags(Extension):
                             "names": tagname,
                             "content": content,
                             "attachment_url": image_url,
-                            "creation_date": datetime.utcnow(),
+                            "creation_date": datetime.datetime.utcnow(),
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
@@ -146,7 +147,7 @@ class Tags(Extension):
                             "names": tagname,
                             "content": content,
                             "attachment_url": catbox.url_upload(attachment.url),
-                            "creation_date": datetime.utcnow(),
+                            "creation_date": datetime.datetime.utcnow(),
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
@@ -168,7 +169,7 @@ class Tags(Extension):
                             "names": tagname,
                             "content": content,
                             "attachment_url": image_url,
-                            "creation_date": datetime.utcnow(),
+                            "creation_date": datetime.datetime.utcnow(),
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
@@ -184,7 +185,7 @@ class Tags(Extension):
                             "names": tagname,
                             "content": content,
                             "attachment_url": catbox.url_upload(attachment.url),
-                            "creation_date": datetime.utcnow(),
+                            "creation_date": datetime.datetime.utcnow(),
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
@@ -216,7 +217,7 @@ class Tags(Extension):
                                 "names": tagname,
                                 "content": content,
                                 "attachment_url": url,
-                                "creation_date": datetime.utcnow(),
+                                "creation_date": datetime.datetime.utcnow(),
                             }
                             tags.insert_one(newtag)
                             embed = Embed(
@@ -232,7 +233,7 @@ class Tags(Extension):
                                 "names": tagname,
                                 "content": content,
                                 "attachment_url": url,
-                                "creation_date": datetime.utcnow(),
+                                "creation_date": datetime.datetime.utcnow(),
                             }
                             tags.insert_one(newtag)
                             embed = Embed(
@@ -247,7 +248,7 @@ class Tags(Extension):
                             "names": tagname,
                             "content": content,
                             "attachment_url": None,
-                            "creation_date": datetime.utcnow(),
+                            "creation_date": datetime.datetime.utcnow(),
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
