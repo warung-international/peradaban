@@ -21,6 +21,7 @@ from naff import (
     slash_command,
     slash_option,
 )
+from naff.ext.paginators import Paginator
 
 load_dotenv()
 
@@ -267,43 +268,70 @@ class tools(Extension):
     async def pref_server_info(self, ctx: PrefixedContext):
         await self.server_info(ctx)
 
-    async def urban(self, ctx, searchterm: str):
-        url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
+    async def urban(self, ctx, word: str):
+        try:
+            url = "https://api.urbandictionary.com/v0/define"
 
-        querystring = {"term": searchterm}
+            params = {"term": str(word).lower()}
 
-        headers = {
-            "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com",
-            "x-rapidapi-key": os.getenv("RAPID_API_KEY"),
-        }
-        response = requests.request("GET", url, headers=headers, params=querystring)
-        # need to defer it, otherwise, it fails
-        await ctx.defer()
-        r = response.json()
-        definition = r["list"][0]["definition"]
-        author = r["list"][0]["author"]
-        example = r["list"][0]["example"]
-        word = r["list"][0]["word"]
-        permalink = r["list"][0]["permalink"]
-        up = r["list"][0]["thumbs_up"]
-        down = r["list"][0]["thumbs_down"]
-        embed = Embed(
-            title=f"Here's the results!",
-            description=f"**[{word}]({permalink})**\nBy: {author}",
-        )
-        embed.add_field(name="Definition: ", value=definition, inline=False)
-        embed.add_field(name="Example: ", value=example, inline=True)
-        embed.set_footer(text=f"{down} Down/{up} Up, Powered by Urban Dictionary API 😉")
-        await ctx.send(embed=embed)
+            headers = {"content-type": "application/json"}
+
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers, params=params) as response:
+                    data = await response.json()
+
+        except aiohttp.ClientError:
+            return await ctx.send("No Urban Dictionary entries were found, or there was an error in the process.")
+
+        if data.get("error") != 404:
+            if not data.get("list"):
+                return await ctx.send("No Urban Dictionary entries were found.")
+            else:
+                # a list of embeds
+                embeds = []
+                for ud in data["list"]:
+                    embed = Embed(color=0x00FF00)
+                    title = "{word} by {author}".format(
+                        word=ud["word"].capitalize(), author=ud["author"]
+                    )
+                    if len(title) > 256:
+                        title = "{}...".format(title[:253])
+                    embed.title = title
+                    embed.url = ud["permalink"]
+
+                    description = ("{definition}\n\n**Example:** {example}").format(**ud)
+                    if len(description) > 2048:
+                        description = "{}...".format(description[:2045])
+                    embed.description = description
+
+                    embed.set_footer(
+                        text=(
+                            "{thumbs_down} Down / {thumbs_up} Up, Powered by Urban Dictionary."
+                        ).format(**ud)
+                    )
+                    embeds.append(embed)
+
+                if embeds is not None and len(embeds) > 0:
+                    
+                    paginators = Paginator(
+                        client=self.bot,
+                        pages=embeds,
+                        timeout_interval=30,
+                        show_select_menu=False,
+                    )
+                    await paginators.send(ctx)
+        else:
+            await ctx.send("No Urban Dictionary entries were found, or there was an error in the process.")
+            
 
     @slash_command("urban", description="Search for a term on the Urban Dictionary")
-    @slash_option("searchterm", "Term to search for", OptionTypes.STRING, required=True)
-    async def slash_urban(self, ctx, searchterm: str):
-        await self.urban(ctx, searchterm)
+    @slash_option("word", "Term to search for", OptionTypes.STRING, required=True)
+    async def slash_urban(self, ctx, word: str):
+        await self.urban(ctx, word)
 
     @prefixed_command(name="urban")
-    async def pref_urban(self, ctx: PrefixedContext, searchterm: str):
-        await self.urban(ctx, searchterm)
+    async def pref_urban(self, ctx: PrefixedContext, word: str):
+        await self.urban(ctx, word)
 
     async def ping(self, ctx):
         results = Embed(
