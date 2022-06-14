@@ -1,9 +1,9 @@
 import datetime
 import os
+import urllib.parse
 from typing import Optional
 
 import aiohttp
-import urllib.parse
 import naff
 import requests
 import wget
