@@ -343,7 +343,7 @@ class tools(Extension):
         search_terms = urllib.parse.quote_plus(search_terms)
         await ctx.send("https://lmgtfy.app/?q={}".format(search_terms))
 
-    @slash_command("lmgtfy", description="Search for a term on the Urban Dictionary")
+    @slash_command("lmgtfy", description="Create a lmgtfy link.")
     @slash_option(
         "search_terms", "Term to search for", OptionTypes.STRING, required=True
     )
