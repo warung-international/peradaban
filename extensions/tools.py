@@ -282,7 +282,9 @@ class tools(Extension):
                     data = await response.json()
 
         except aiohttp.ClientError:
-            return await ctx.send("No Urban Dictionary entries were found, or there was an error in the process.")
+            return await ctx.send(
+                "No Urban Dictionary entries were found, or there was an error in the process."
+            )
 
         if data.get("error") != 404:
             if not data.get("list"):
@@ -300,7 +302,9 @@ class tools(Extension):
                     embed.title = title
                     embed.url = ud["permalink"]
 
-                    description = ("{definition}\n\n**Example:** {example}").format(**ud)
+                    description = ("{definition}\n\n**Example:** {example}").format(
+                        **ud
+                    )
                     if len(description) > 2048:
                         description = "{}...".format(description[:2045])
                     embed.description = description
@@ -313,7 +317,7 @@ class tools(Extension):
                     embeds.append(embed)
 
                 if embeds is not None and len(embeds) > 0:
-                    
+
                     paginators = Paginator(
                         client=self.bot,
                         pages=embeds,
@@ -322,8 +326,9 @@ class tools(Extension):
                     )
                     await paginators.send(ctx)
         else:
-            await ctx.send("No Urban Dictionary entries were found, or there was an error in the process.")
-            
+            await ctx.send(
+                "No Urban Dictionary entries were found, or there was an error in the process."
+            )
 
     @slash_command("urban", description="Search for a term on the Urban Dictionary")
     @slash_option("word", "Term to search for", OptionTypes.STRING, required=True)
@@ -337,9 +342,11 @@ class tools(Extension):
     async def lmgtfy(self, ctx, search_terms: str):
         search_terms = urllib.parse.quote_plus(search_terms)
         await ctx.send("https://lmgtfy.app/?q={}".format(search_terms))
-    
+
     @slash_command("lmgtfy", description="Search for a term on the Urban Dictionary")
-    @slash_option("search_terms", "Term to search for", OptionTypes.STRING, required=True)
+    @slash_option(
+        "search_terms", "Term to search for", OptionTypes.STRING, required=True
+    )
     async def slash_lmgtfy(self, ctx, search_terms: str):
         await self.lmgtfy(ctx, search_terms)
 
