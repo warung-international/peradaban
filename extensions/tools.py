@@ -3,6 +3,7 @@ import os
 from typing import Optional
 
 import aiohttp
+import urllib.parse
 import naff
 import requests
 import wget
@@ -332,6 +333,19 @@ class tools(Extension):
     @prefixed_command(name="urban")
     async def pref_urban(self, ctx: PrefixedContext, word: str):
         await self.urban(ctx, word)
+
+    async def lmgtfy(self, ctx, search_terms: str):
+        search_terms = urllib.parse.quote_plus(search_terms)
+        await ctx.send("https://lmgtfy.app/?q={}".format(search_terms))
+    
+    @slash_command("lmgtfy", description="Search for a term on the Urban Dictionary")
+    @slash_option("search_terms", "Term to search for", OptionTypes.STRING, required=True)
+    async def slash_lmgtfy(self, ctx, search_terms: str):
+        await self.lmgtfy(ctx, search_terms)
+
+    @prefixed_command(name="lmgtfy")
+    async def pref_lmgtfy(self, ctx: PrefixedContext, search_terms: str):
+        await self.lmgtfy(ctx, search_terms)
 
     async def ping(self, ctx):
         results = Embed(
