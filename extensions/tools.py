@@ -290,7 +290,7 @@ class tools(Extension):
                 # a list of embeds
                 embeds = []
                 for ud in data["list"]:
-                    embed = Embed(color=0x00FF00)
+                    embed = Embed()
                     title = "{word} by {author}".format(
                         word=ud["word"].capitalize(), author=ud["author"]
                     )
