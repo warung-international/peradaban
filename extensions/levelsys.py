@@ -58,109 +58,121 @@ class levellings(Extension):
                 )
                 await ctx.send(embed=embed)
         else:
-            xp = stats["formatxp"]
-            lvl = stats["level"]
-            rank = 0
-            rankings = levelling.find().sort("xp", -1)
-            for x in rankings:
-                rank += 1
-                if stats["id"] == x["id"]:
-                    break
-            # Replace infoimgimg.png with your background image.
-            img = Image.open("assets/profile.png")
-            draw = ImageDraw.Draw(img)
-            # Make sure you insert a valid font from your folder.
-            ranks = ImageFont.truetype("assets/Quotable.otf", 55)
-            bankname = ImageFont.truetype("assets/Quotable.otf", 100)
-            coins = ImageFont.truetype("assets/Quotable.otf", 55)
-            userid = ImageFont.truetype("assets/ARIALUNI.otf", 70)
-            username = ImageFont.truetype("assets/ARIALUNI.otf", 45)
-            since = ImageFont.truetype("assets/ARIALUNI.otf", 25)
-            membersince = ImageFont.truetype("assets/ARIALUNI.otf", 54)
-            premier = ImageFont.truetype("assets/ARIALUNI.otf", 80)
-            #    (x,y)::↓ ↓ ↓ (text)::↓ ↓     (r,g,b)::↓ ↓ ↓
-            async with aiohttp.ClientSession() as session:
-                async with session.get(str(ctx.guild.icon.url)) as response:
-                    guildicon = await response.read()
-            guildicons = (
-                Image.open(BytesIO(guildicon))
-                .resize((175, 175), Image.LANCZOS)
-                .convert("RGB")
-            )
-            c = Image.open("assets/cover.png").resize((175, 175)).convert("RGBA")
-            img.paste(guildicons, (1300, 55), c)
-
-            # USER AVATAR DISINI WEYYYYY
-            async with aiohttp.ClientSession() as session:
-                async with session.get(str(member.avatar.url)) as response:
-                    image = await response.read()
-            avatar = (
-                Image.open(BytesIO(image))
-                .resize((90, 90), Image.LANCZOS)
-                .convert("RGB")
-            )
-            c = Image.open("assets/cover.png").resize((90, 90)).convert("RGBA")
-            img.paste(avatar, (100, 690), c)
-
-            draw.text(
-                (510, 85),
-                f"Warung International",
-                (255, 255, 255),
-                font=bankname,
-                align="right",
-            )
-            draw.text(
-                (100, 600),
-                f"{member.id}",
-                (255, 255, 255),
-                font=userid,
-            )
-            draw.text(
-                (200, 700),
-                f"{member.username}#{member.discriminator}",
-                (255, 255, 255),
-                font=username,
-            )
-            draw.text(
-                (232, 290),
-                f"{xp} XP (Experience Points)",
-                (255, 255, 255),
-                font=coins,
-            )
-
-            draw.text(
-                (232, 390),
-                f"Rank #{rank} | Level {lvl}",
-                (255, 255, 255),
-                font=ranks,
-            )
-
-            draw.text(
-                (700, 530),
-                f"Joined",
-                (255, 255, 255),
-                font=since,
-            )
-
-            joindate = member.joined_at.strftime("%m/%y")
-            draw.text(
-                (780, 500),
-                f"{joindate}",
-                (255, 255, 255),
-                font=membersince,
-            )
+            premium = ctx.guild.premium_subscriber_role
+            if premium not in member.roles:
+                msg = stats["messagecount"]
+                rank = 0
+                rankings = levelling.find().sort("xp", -1)
+                for x in rankings:
+                    rank += 1
+                    if stats["id"] == x["id"]:
+                        break
+                if member is None:
+                    await ctx.send(f"Your top: {rank} Messages: {msg}")
+                else:
+                    await ctx.send(f"{member.display_name} top: {rank} Messages: {msg}")
 
             premium = ctx.guild.premium_subscriber_role
             if premium in member.roles:
-                draw.text((1150, 700), f"Premium", (255, 255, 255), font=premier)
-            else:
-                draw.text((1150, 700), f"Standard", (255, 255, 255), font=premier)
+                xp = stats["formatxp"]
+                lvl = stats["level"]
+                rank = 0
+                rankings = levelling.find().sort("xp", -1)
+                for x in rankings:
+                    rank += 1
+                    if stats["id"] == x["id"]:
+                        break
+                # Replace infoimgimg.png with your background image.
+                img = Image.open("assets/profile.png")
+                draw = ImageDraw.Draw(img)
+                # Make sure you insert a valid font from your folder.
+                ranks = ImageFont.truetype("assets/Quotable.otf", 55)
+                bankname = ImageFont.truetype("assets/Quotable.otf", 100)
+                coins = ImageFont.truetype("assets/Quotable.otf", 55)
+                userid = ImageFont.truetype("assets/ARIALUNI.otf", 70)
+                username = ImageFont.truetype("assets/ARIALUNI.otf", 45)
+                since = ImageFont.truetype("assets/ARIALUNI.otf", 25)
+                membersince = ImageFont.truetype("assets/ARIALUNI.otf", 54)
+                premier = ImageFont.truetype("assets/ARIALUNI.otf", 80)
+                #    (x,y)::↓ ↓ ↓ (text)::↓ ↓     (r,g,b)::↓ ↓ ↓
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(str(ctx.guild.icon.url)) as response:
+                        guildicon = await response.read()
+                guildicons = (
+                    Image.open(BytesIO(guildicon))
+                    .resize((175, 175), Image.LANCZOS)
+                    .convert("RGB")
+                )
+                c = Image.open("assets/cover.png").resize((175, 175)).convert("RGBA")
+                img.paste(guildicons, (1300, 55), c)
 
-            # Change Leveling/infoimg2.png if needed.
-            img.save(f"assets/card.png")
-            ffile = naff.File(f"assets/card.png")
-            await ctx.send(file=ffile)
-            # Make sure you insert a valid font from your folder.
+                # USER AVATAR DISINI WEYYYYY
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(str(member.avatar.url)) as response:
+                        image = await response.read()
+                avatar = (
+                    Image.open(BytesIO(image))
+                    .resize((90, 90), Image.LANCZOS)
+                    .convert("RGB")
+                )
+                c = Image.open("assets/cover.png").resize((90, 90)).convert("RGBA")
+                img.paste(avatar, (100, 690), c)
+
+                draw.text(
+                    (510, 85),
+                    f"Warung International",
+                    (255, 255, 255),
+                    font=bankname,
+                    align="right",
+                )
+                draw.text(
+                    (100, 600),
+                    f"{member.id}",
+                    (255, 255, 255),
+                    font=userid,
+                )
+                draw.text(
+                    (200, 700),
+                    f"{member.username}#{member.discriminator}",
+                    (255, 255, 255),
+                    font=username,
+                )
+                draw.text(
+                    (232, 290),
+                    f"{xp} XP (Experience Points)",
+                    (255, 255, 255),
+                    font=coins,
+                )
+
+                draw.text(
+                    (232, 390),
+                    f"Rank #{rank} | Level {lvl}",
+                    (255, 255, 255),
+                    font=ranks,
+                )
+
+                draw.text(
+                    (700, 530),
+                    f"Joined",
+                    (255, 255, 255),
+                    font=since,
+                )
+
+                joindate = member.joined_at.strftime("%m/%y")
+                draw.text(
+                    (780, 500),
+                    f"{joindate}",
+                    (255, 255, 255),
+                    font=membersince,
+                )
+
+                draw.text((1150, 700), f"Premium", (255, 255, 255), font=premier)
+
+                # Change Leveling/infoimg2.png if needed.
+                img.save(f"assets/card.png")
+                ffile = naff.File(f"assets/card.png")
+                await ctx.send(file=ffile)
+                # Make sure you insert a valid font from your folder.
 
     async def levels(self, ctx):
         components = Button(
