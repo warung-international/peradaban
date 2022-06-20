@@ -126,13 +126,15 @@ class Tags(Extension):
     ):
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -310,7 +312,8 @@ class Tags(Extension):
                         return await ctx.send(embed=embed)
         else:
             embed = Embed(
-                description=f"<:cross:839158779815657512> The tag `{name}` already exists", color=0xDD2222
+                description=f"<:cross:839158779815657512> The tag `{name}` already exists",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
 
@@ -346,13 +349,15 @@ class Tags(Extension):
     ):
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -612,7 +617,8 @@ class Tags(Extension):
     async def tag_delete(self, ctx: InteractionContext, name: str = None):
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -686,7 +692,8 @@ class Tags(Extension):
     async def tag_admin_delete(self, ctx: InteractionContext, name: str = None):
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -733,7 +740,8 @@ class Tags(Extension):
     async def tag_info(self, ctx: InteractionContext, name: str = None):
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -744,7 +752,8 @@ class Tags(Extension):
         tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_view is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
