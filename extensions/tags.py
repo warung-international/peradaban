@@ -56,12 +56,51 @@ class Tags(Extension):
         self.bot = bot
 
     @slash_command(
-        name="t",
+        name="tags",
+        sub_cmd_name="use",
+        sub_cmd_description="allow's me to recall tags",
+    )
+    @slash_option(
+        name="name",
+        description="Type a name of a tag",
+        opt_type=OptionTypes.STRING,
+        required=True,
+    )
+    async def tags_use(self, ctx: InteractionContext, name: str):
+
+        await ctx.defer()
+
+        regx = {"$regex": f"^{name}$", "$options": "i"}
+        tppk = tags.find_one({"names": regx, "guild_id": ctx.guild_id})
+        if tppk is None:
+            embed = Embed(
+                description=f"<:cross:839158779815657512> `{name}` is not a tag",
+                color=0xDD2222,
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+        else:
+            at = tppk["attachment_url"]
+            cont = tppk["content"]
+            if at is not None:
+                if cont is not None:
+                    await ctx.send(f"{cont}\n{at}")
+                else:
+                    await ctx.send(f"{at}")
+            else:
+                await ctx.send(f"{cont}")
+            uses = tppk["no_of_times_used"]
+            tags.update_one(
+                {"names": regx, "guild_id": ctx.guild_id},
+                {"$set": {"no_of_times_used": uses + 1}},
+            )
+
+    @slash_command(
+        name="tags",
         sub_cmd_name="create",
         sub_cmd_description="allow's me to store tags",
     )
     @slash_option(
-        name="tagname",
+        name="name",
         description="Type a name of a tag",
         opt_type=OptionTypes.STRING,
         required=True,
@@ -81,25 +120,23 @@ class Tags(Extension):
     async def tag_create(
         self,
         ctx: InteractionContext,
-        tagname: str = None,
+        name: str = None,
         content: str = None,
         attachment: OptionTypes.ATTACHMENT = None,
     ):
-        if tagname is None:
+        if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-        elif (tagname is None) and (content is None):
+        elif (name is None) and (content is None):
             embed = Embed(
                 description=f"<:cross:839158779815657512> You must include tag's name and content",
                 color=0xDD2222,
@@ -107,10 +144,11 @@ class Tags(Extension):
             await ctx.send(embed=embed, ephemeral=True)
             return
 
-        tagname_regx = {"$regex": f"^{tagname}$", "$options": "i"}
-        check = tags.find_one({"tagname": tagname_regx})
-        if check == None:
-            await ctx.defer()
+        await ctx.defer()
+
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        check = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
+        if check is None:
             if attachment is not None:
                 for at in ["exe", "scr", "cpl", "doc", "jar"]:
                     if at in attachment.content_type:
@@ -126,32 +164,36 @@ class Tags(Extension):
                     ):
                         image_url = catbox.url_upload(attachment.url)
                         newtag = {
+                            "guild_id": ctx.guild_id,
                             "author_id": ctx.author.id,
                             "owner_id": ctx.author.id,
-                            "names": tagname,
+                            "names": name,
                             "content": content,
                             "attachment_url": image_url,
                             "creation_date": datetime.datetime.utcnow(),
+                            "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name}",
                             color=0x0C73D3,
                         )
                         embed.set_image(url=image_url)
                         return await ctx.send(embed=embed)
                     else:
                         newtag = {
+                            "guild_id": ctx.guild_id,
                             "author_id": ctx.author.id,
                             "owner_id": ctx.author.id,
-                            "names": tagname,
+                            "names": name,
                             "content": content,
-                            "attachment_url": catbox.url_upload(attachment.url),
+                            "attachment_url": image_url,
                             "creation_date": datetime.datetime.utcnow(),
+                            "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname}\n**Attachment:** {catbox.url_upload(attachment.url)}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name}\n**Attachment:** {catbox.url_upload(attachment.url)}",
                             color=0x0C73D3,
                         )
                         return await ctx.send(embed=embed)
@@ -164,32 +206,36 @@ class Tags(Extension):
                     ):
                         image_url = catbox.url_upload(attachment.url)
                         newtag = {
+                            "guild_id": ctx.guild_id,
                             "author_id": ctx.author.id,
                             "owner_id": ctx.author.id,
-                            "names": tagname,
+                            "names": name,
                             "content": content,
                             "attachment_url": image_url,
                             "creation_date": datetime.datetime.utcnow(),
+                            "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname}\n**Content:** {content}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name}\n**Content:** {content}",
                             color=0x0C73D3,
                         )
                         embed.set_image(url=image_url)
                         return await ctx.send(embed=embed)
                     else:
                         newtag = {
+                            "guild_id": ctx.guild_id,
                             "author_id": ctx.author.id,
                             "owner_id": ctx.author.id,
-                            "names": tagname,
+                            "names": name,
                             "content": content,
-                            "attachment_url": catbox.url_upload(attachment.url),
+                            "attachment_url": image_url,
                             "creation_date": datetime.datetime.utcnow(),
+                            "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname}\n**Content:** {content}\n**Attachment:** {catbox.url_upload(attachment.url)}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name}\n**Content:** {content}\n**Attachment:** {catbox.url_upload(attachment.url)}",
                             color=0x0C73D3,
                         )
                         return await ctx.send(embed=embed)
@@ -212,64 +258,69 @@ class Tags(Extension):
                             or url.endswith(".gif")
                         ):
                             newtag = {
+                                "guild_id": ctx.guild_id,
                                 "author_id": ctx.author.id,
                                 "owner_id": ctx.author.id,
-                                "names": tagname,
+                                "names": name,
                                 "content": content,
-                                "attachment_url": url,
+                                "attachment_url": image_url,
                                 "creation_date": datetime.datetime.utcnow(),
+                                "no_of_times_used": 0,
                             }
                             tags.insert_one(newtag)
                             embed = Embed(
-                                description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:**{content}",
+                                description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:**{content}",
                                 color=0x0C73D3,
                             )
                             embed.set_image(url=url)
                             return await ctx.send(embed=embed)
                         else:
                             newtag = {
+                                "guild_id": ctx.guild_id,
                                 "author_id": ctx.author.id,
                                 "owner_id": ctx.author.id,
-                                "names": tagname,
+                                "names": name,
                                 "content": content,
-                                "attachment_url": url,
+                                "attachment_url": image_url,
                                 "creation_date": datetime.datetime.utcnow(),
+                                "no_of_times_used": 0,
                             }
                             tags.insert_one(newtag)
                             embed = Embed(
-                                description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** \n{content}",
+                                description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
                                 color=0x0C73D3,
                             )
                             return await ctx.send(embed=embed)
                     else:
                         newtag = {
+                            "guild_id": ctx.guild_id,
                             "author_id": ctx.author.id,
                             "owner_id": ctx.author.id,
-                            "names": tagname,
+                            "names": name,
                             "content": content,
                             "attachment_url": None,
                             "creation_date": datetime.datetime.utcnow(),
+                            "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
                         embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** \n{content}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
                             color=0x0C73D3,
                         )
                         return await ctx.send(embed=embed)
         else:
             embed = Embed(
-                description=f"<:cross:839158779815657512> The tag `{tagname}` already exists",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> The tag `{name}` already exists", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
 
     @slash_command(
-        name="t",
+        name="tags",
         sub_cmd_name="edit",
         sub_cmd_description="allow's me to edit tags that you own",
     )
     @slash_option(
-        name="tagname",
+        name="name",
         description="Type a name of a tag",
         opt_type=OptionTypes.STRING,
         required=True,
@@ -289,25 +340,23 @@ class Tags(Extension):
     async def tag_edit(
         self,
         ctx: InteractionContext,
-        tagname: str = None,
+        name: str = None,
         content: str = None,
         attachment: OptionTypes.ATTACHMENT = None,
     ):
-        if tagname is None:
+        if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-        elif (tagname is None) and (content is None):
+        elif (name is None) and (content is None):
             embed = Embed(
                 description=f"<:cross:839158779815657512> You must include tag's name and content",
                 color=0xDD2222,
@@ -317,14 +366,25 @@ class Tags(Extension):
 
         await ctx.defer()
 
-        tagname_regx = {"$regex": f"^{tagname}$", "$options": "i"}
-        tag_to_edit = tags.find_one({"names": tagname_regx, "author_id": ctx.author.id})
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        tag_to_edit = tags.find_one(
+            {"guild_id": ctx.guild_id, "names": name_regx, "author_id": ctx.author.id}
+        )
         if tag_to_edit is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You don't own a tag called  `{tagname}`",
-                color=0xDD2222,
+            tag_to_edit = tags.find_one(
+                {
+                    "guild_id": ctx.guild_id,
+                    "names": name_regx,
+                    "owner_id": ctx.author.id,
+                }
             )
-            return await ctx.send(embed=embed, ephemeral=True)
+            if tag_to_edit is None:
+                embed = Embed(
+                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
+                    color=0xDD2222,
+                )
+                await ctx.send(embed=embed, ephemeral=True)
+                return
 
         if attachment is not None:
             for at in ["exe", "scr", "cpl", "doc", "jar"]:
@@ -340,24 +400,52 @@ class Tags(Extension):
                     or (attachment.content_type == "image/gif")
                 ):
                     image_url = catbox.url_upload(attachment.url)
-                    tags.update_one(
-                        {"names": tagname_regx},
-                        {"$set": {"attachment_url": image_url, "content": content}},
-                    )
+                    try:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "author_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
+                    except:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "owner_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
                     embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname}",
+                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}",
                         color=0x0C73D3,
                     )
                     embed.set_image(url=image_url)
                     return await ctx.send(embed=embed)
                 else:
                     image_url = catbox.url_upload(attachment.url)
-                    tags.update_one(
-                        {"names": tagname_regx},
-                        {"$set": {"attachment_url": image_url, "content": content}},
-                    )
+                    try:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "author_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
+                    except:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "owner_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
                     embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname}\n**Attachment:** {catbox.url_upload(attachment.url)}",
+                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}\n**Attachment:** {catbox.url_upload(attachment.url)}",
                         color=0x0C73D3,
                     )
                     return await ctx.send(embed=embed)
@@ -369,24 +457,52 @@ class Tags(Extension):
                     or (attachment.content_type == "image/gif")
                 ):
                     image_url = catbox.url_upload(attachment.url)
-                    tags.update_one(
-                        {"names": tagname_regx},
-                        {"$set": {"attachment_url": image_url, "content": content}},
-                    )
+                    try:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "author_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
+                    except:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "owner_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
                     embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname}\n**Content:** {content}",
+                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}\n**Content:** {content}",
                         color=0x0C73D3,
                     )
                     embed.set_image(url=image_url)
                     return await ctx.send(embed=embed)
                 else:
                     image_url = catbox.url_upload(attachment.url)
-                    tags.update_one(
-                        {"names": tagname_regx},
-                        {"$set": {"attachment_url": image_url, "content": content}},
-                    )
+                    try:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "author_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
+                    except:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "owner_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": image_url, "content": content}},
+                        )
                     embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname}\n**Content:** {content}\n**Attachment:** {catbox.url_upload(attachment.url)}",
+                        description=f"__**Tag created!**__ \n\n**Tag's name:** {name}\n**Content:** {content}\n**Attachment:** {catbox.url_upload(attachment.url)}",
                         color=0x0C73D3,
                     )
                     return await ctx.send(embed=embed)
@@ -408,73 +524,122 @@ class Tags(Extension):
                         or url.endswith(".jpeg")
                         or url.endswith(".gif")
                     ):
-                        image_url = None
-                        tags.update_one(
-                            {"names": tagname_regx},
-                            {"$set": {"attachment_url": image_url, "content": content}},
-                        )
+
+                        try:
+                            tags.update_one(
+                                {
+                                    "guild_id": ctx.guild_id,
+                                    "names": name_regx,
+                                    "author_id": ctx.author.id,
+                                },
+                                {"$set": {"attachment_url": None, "content": content}},
+                            )
+                        except:
+                            tags.update_one(
+                                {
+                                    "guild_id": ctx.guild_id,
+                                    "names": name_regx,
+                                    "owner_id": ctx.author.id,
+                                },
+                                {"$set": {"attachment_url": None, "content": content}},
+                            )
                         embed = Embed(
-                            description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:**{content}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:**{content}",
                             color=0x0C73D3,
                         )
                         embed.set_image(url=url)
                         return await ctx.send(embed=embed)
                     else:
-                        image_url = None
-                        tags.update_one(
-                            {"names": tagname_regx},
-                            {"$set": {"attachment_url": image_url, "content": content}},
-                        )
+                        try:
+                            tags.update_one(
+                                {
+                                    "guild_id": ctx.guild_id,
+                                    "names": name_regx,
+                                    "author_id": ctx.author.id,
+                                },
+                                {"$set": {"attachment_url": None, "content": content}},
+                            )
+                        except:
+                            tags.update_one(
+                                {
+                                    "guild_id": ctx.guild_id,
+                                    "names": name_regx,
+                                    "owner_id": ctx.author.id,
+                                },
+                                {"$set": {"attachment_url": None, "content": content}},
+                            )
                         embed = Embed(
-                            description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** \n{content}",
+                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
                             color=0x0C73D3,
                         )
                         return await ctx.send(embed=embed)
                 else:
-                    image_url = None
-                    tags.update_one(
-                        {"names": tagname_regx},
-                        {"$set": {"attachment_url": image_url, "content": content}},
-                    )
-                    await tag_to_edit.save()
+                    try:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "author_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": None, "content": content}},
+                        )
+                    except:
+                        tags.update_one(
+                            {
+                                "guild_id": ctx.guild_id,
+                                "names": name_regx,
+                                "owner_id": ctx.author.id,
+                            },
+                            {"$set": {"attachment_url": None, "content": content}},
+                        )
                     embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** \n{content}",
+                        description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
                         color=0x0C73D3,
                     )
                     return await ctx.send(embed=embed)
 
     @slash_command(
-        name="t",
+        name="tags",
         sub_cmd_name="delete",
         sub_cmd_description="allow's me to delete tags that you own",
     )
     @slash_option(
-        name="tagname",
+        name="name",
         description="Type a name of a tag",
         opt_type=OptionTypes.STRING,
         required=True,
     )
-    async def tag_delete(self, ctx: InteractionContext, tagname: str = None):
-        if tagname is None:
+    async def tag_delete(self, ctx: InteractionContext, name: str = None):
+        if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
-            return await ctx.send(embed=embed, ephemeral=True)
+            await ctx.send(embed=embed, ephemeral=True)
+            return
 
-        tagname_regx = {"$regex": f"^{tagname}$", "$options": "i"}
+        await ctx.defer()
 
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
         tag_to_delete = tags.find_one(
-            {"names": tagname_regx, "author_id": ctx.author.id}
+            {"guild_id": ctx.guild_id, "names": name_regx, "author_id": ctx.author.id}
         )
 
         if tag_to_delete is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You don't own a tag called  `{tagname}`",
-                color=0xDD2222,
+            tag_to_delete = tags.find_one(
+                {
+                    "guild_id": ctx.guild_id,
+                    "names": name_regx,
+                    "owner_id": ctx.author.id,
+                }
             )
-            return await ctx.send(embed=embed, ephemeral=True)
-        content = ""
+            if tag_to_delete is None:
+                embed = Embed(
+                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
+                    color=0xDD2222,
+                )
+                await ctx.send(embed=embed, ephemeral=True)
+                return
+
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
         if cont is None:
@@ -485,42 +650,59 @@ class Tags(Extension):
             if att is not None:
                 content = content + f"\n{att}"
         embed = Embed(
-            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** {content}",
+            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {cont}",
             color=0x0C73D3,
         )
         await ctx.send(embed=embed)
-        tags.delete_one({"names": tagname_regx})
+        try:
+            tags.delete_one(
+                {
+                    "guild_id": ctx.guild_id,
+                    "names": name_regx,
+                    "author_id": ctx.author.id,
+                }
+            )
+        except:
+            tags.delete_one(
+                {
+                    "guild_id": ctx.guild_id,
+                    "names": name_regx,
+                    "owner_id": ctx.author.id,
+                }
+            )
 
     @slash_command(
-        name="t",
-        sub_cmd_name="mod-delete",
-        sub_cmd_description="[MODERATORS ONLY] allow's me to delete any tag",
+        name="tags",
+        sub_cmd_name="admin-delete",
+        sub_cmd_description="[ADMINISTRATORS ONLY] allow's me to delete any tag",
     )
     @slash_option(
-        name="tagname",
+        name="name",
         description="Type a name of a tag",
         opt_type=OptionTypes.STRING,
         required=True,
     )
     @check(member_permissions(Permissions.MANAGE_MESSAGES))
-    async def tag_admin_delete(self, ctx: InteractionContext, tagname: str = None):
-        if tagname is None:
+    async def tag_admin_delete(self, ctx: InteractionContext, name: str = None):
+        if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
-            return await ctx.send(embed=embed, ephemeral=True)
+            await ctx.send(embed=embed, ephemeral=True)
+            return
 
-        tagname_regx = {"$regex": f"^{tagname}$", "$options": "i"}
-        tag_to_delete = tags.find_one({"names": tagname_regx})
+        await ctx.defer()
+
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        tag_to_delete = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_delete is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> There's not a tag with the name `{tagname}`",
+                description=f"<:cross:839158779815657512> There's not a tag with the name `{name}`",
                 color=0xDD2222,
             )
-            return await ctx.send(embed=embed, ephemeral=True)
+            await ctx.send(embed=embed, ephemeral=True)
+            return
 
-        content = ""
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
         if cont is None:
@@ -531,49 +713,95 @@ class Tags(Extension):
             if att is not None:
                 content = content + f"\n{att}"
         embed = Embed(
-            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {tagname} \n**Tag's content:** {content}",
+            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {content}",
             color=0x0C73D3,
         )
         await ctx.send(embed=embed)
-        tags.delete_one({"names": tagname_regx})
+        tags.delete_one({"guild_id": ctx.guild_id, "names": name_regx})
 
     @slash_command(
-        name="t",
-        sub_cmd_name="use",
-        sub_cmd_description="allow's me to recall tags",
+        name="tags",
+        sub_cmd_name="info",
+        sub_cmd_description="allow's me to see information about a tag",
     )
     @slash_option(
-        name="tagname",
+        name="name",
         description="Type a name of a tag",
         opt_type=OptionTypes.STRING,
         required=True,
     )
-    async def tags_show(self, ctx: InteractionContext, tagname: str):
-        regx = {"$regex": f"^{tagname}$", "$options": "i"}
-        tppk = tags.find_one({"names": regx})
-        if tppk is None:
+    async def tag_info(self, ctx: InteractionContext, name: str = None):
+        if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> `{tagname}` is not a tag",
-                color=0xDD2222,
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        await ctx.defer()
+
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
+        if tag_to_view is None:
+            embed = Embed(
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        owner = tag_to_view["owner_id"]
+
+        if owner is not None:
+            tag_owner = await self.bot.fetch_user(owner)
+
         else:
-            at = tppk["attachment_url"]
-            cont = tppk["content"]
-            if at is not None:
-                if cont is not None:
-                    await ctx.send(f"{cont}\n{at}")
-                else:
-                    await ctx.send(f"{at}")
+            tag_owner = "UNKNOWN"
+
+        current_owner = "Current owner"
+        last_owner = tag_owner
+
+        in_guild = find_member(ctx, owner)
+        if in_guild is None:
+            current_owner = "Currently Orphaned"
+            last_owner = f"Last owner: {tag_owner}"
+
+        total_uses = tag_to_view["no_of_times_used"]
+        uses = total_uses
+        if total_uses is None:
+            uses = "UNKNOWN"
+
+        creation_date = tag_to_view["creation_date"]
+        if creation_date is None:
+            date = "UNKNOWN"
+        else:
+            date = f"<t:{math.ceil(creation_date.replace(tzinfo=timezone.utc).timestamp())}:R>"
+
+        att = tag_to_view["attachment_url"]
+        cont = tag_to_view["content"]
+        if att is not None:
+            if cont is not None:
+                content = f"{cont}\n{att}"
             else:
-                await ctx.send(f"{cont}")
+                content = f"{att}"
+        else:
+            content = f"{cont}"
+
+        embed = Embed(title=f"Info about [{name}] tag", color=0x0C73D3)
+        embed.add_field(name=current_owner, value=last_owner)
+        embed.add_field(name="Total uses", value=uses)
+        embed.add_field(name="Created", value=date)
+        embed.add_field(name="Content", value=content)
+        await ctx.send(embed=embed)
 
     @slash_command(
-        name="t",
+        name="tags",
         sub_cmd_name="list",
         sub_cmd_description="allow's me to see all tags for this server",
     )
     async def tag_list(self, ctx: InteractionContext):
+
+        await ctx.defer()
+
         from naff.ext.paginators import Paginator
 
         def chunks(l, n):
@@ -593,7 +821,7 @@ class Tags(Extension):
             embed.add_field(name="Tag Names", value=names, inline=True)
             return embed
 
-        tag_names = tags.find()
+        tag_names = tags.find({"guild_id": ctx.guild_id})
         names = []
         for t in tag_names:
             namanya = t["names"]
@@ -622,79 +850,10 @@ class Tags(Extension):
         paginator = Paginator(
             client=self.bot,
             pages=embeds,
-            timeout_interval=80,
+            timeout_interval=30,
             show_select_menu=False,
-            wrong_user_message="You're not the one destined for this list.",
         )
         await paginator.send(ctx)
-
-    @slash_command(
-        name="t",
-        sub_cmd_name="info",
-        sub_cmd_description="allow's me to see information about a tag",
-    )
-    @slash_option(
-        name="tagname",
-        description="Type a name of a tag",
-        opt_type=OptionTypes.STRING,
-        required=True,
-    )
-    async def tag_info(self, ctx: InteractionContext, tagname: str = None):
-        if tagname is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        tagname_regx = {"$regex": f"^{tagname}$", "$options": "i"}
-        tag_to_view = tags.find_one({"names": tagname_regx})
-        if tag_to_view is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{tagname}`",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        owner = tag_to_view["owner_id"]
-
-        if owner is not None:
-            tag_owner = await self.bot.fetch_user(owner)
-
-        else:
-            tag_owner = "UNKNOWN"
-
-        current_owner = "Current owner"
-        last_owner = tag_owner
-
-        in_guild = find_member(ctx, owner)
-        if in_guild is None:
-            current_owner = "Currently Orphaned"
-            last_owner = f"Last owner: {tag_owner}"
-
-        creation_date = tag_to_view["creation_date"]
-        if creation_date is None:
-            date = "UNKNOWN"
-        else:
-            date = f"<t:{math.ceil(creation_date.replace(tzinfo=timezone.utc).timestamp())}:R>"
-
-        att = tag_to_view["attachment_url"]
-        cont = tag_to_view["content"]
-        if att is not None:
-            if cont is not None:
-                content = f"{cont}\n{att}"
-            else:
-                content = f"{att}"
-        else:
-            content = f"{cont}"
-
-        embed = Embed(title=f"Info about [{tagname}] tag", color=0x0C73D3)
-        embed.add_field(name=current_owner, value=last_owner)
-        embed.add_field(name="Created", value=date)
-        embed.add_field(name="Content", value=content)
-        await ctx.send(embed=embed)
 
 
 def setup(bot):
