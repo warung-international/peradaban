@@ -178,13 +178,15 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -247,8 +249,8 @@ class Tags(Extension):
                             "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
-                        
-                        embed.add_field(name="🔗 Linked Attachments:", value=catbox.url_upload(attachment.url))
+
+                        embed.add_field(name="🔗 Linked Attachments:", value=image_url)
                         embed.timestamp = datetime.datetime.utcnow()
                         return await ctx.send(embed=embed)
                 else:
@@ -287,8 +289,8 @@ class Tags(Extension):
                             "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
-                        
-                        embed.add_field(name="🔗 Linked Attachments:", value=catbox.url_upload(attachment.url))
+
+                        embed.add_field(name="🔗 Linked Attachments:", value=image_url)
                         embed.description = content
                         embed.timestamp = datetime.datetime.utcnow()
                         return await ctx.send(embed=embed)
@@ -355,36 +357,37 @@ class Tags(Extension):
                             "no_of_times_used": 0,
                         }
                         tags.insert_one(newtag)
-                        
+
                         embed.description = content
                         embed.timestamp = datetime.datetime.utcnow()
                         return await ctx.send(embed=embed)
         else:
             embed = Embed(
-                description=f"<:cross:839158779815657512> The tag `{name}` already exists", color=0xDD2222
+                description=f"<:cross:839158779815657512> The tag `{name}` already exists",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
 
     @slash_command(
-        name="tags",
+        name="tag",
         sub_cmd_name="edit",
-        sub_cmd_description="allow's me to edit tags that you own",
+        sub_cmd_description="Edit a tag",
     )
     @slash_option(
         name="name",
-        description="Type a name of a tag",
+        description="Tag name",
         opt_type=OptionTypes.STRING,
         required=True,
     )
     @slash_option(
         name="content",
-        description="write the content",
+        description="Tag content",
         opt_type=OptionTypes.STRING,
         required=False,
     )
     @slash_option(
         name="attachment",
-        description="upload a file",
+        description="Tag attachment",
         opt_type=OptionTypes.ATTACHMENT,
         required=False,
     )
@@ -400,13 +403,15 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -437,6 +442,14 @@ class Tags(Extension):
                 )
                 await ctx.send(embed=embed, ephemeral=True)
                 return
+
+        embed = Embed(color=0x5865F2)
+        embed.set_author(
+            name=str(ctx.author),
+            url="https://discordapp.com/users/{}".format(ctx.author.id),
+            icon_url=ctx.author.avatar.url,
+        )
+        embed.title = f"Tag [{name}] Edited!"
 
         if attachment is not None:
             for at in ["exe", "scr", "cpl", "doc", "jar"]:
@@ -470,11 +483,9 @@ class Tags(Extension):
                             },
                             {"$set": {"attachment_url": image_url, "content": content}},
                         )
-                    embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}",
-                        color=0x0C73D3,
-                    )
+
                     embed.set_image(url=image_url)
+                    embed.timestamp = datetime.datetime.utcnow()
                     return await ctx.send(embed=embed)
                 else:
                     image_url = catbox.url_upload(attachment.url)
@@ -496,10 +507,9 @@ class Tags(Extension):
                             },
                             {"$set": {"attachment_url": image_url, "content": content}},
                         )
-                    embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}\n**Attachment:** {catbox.url_upload(attachment.url)}",
-                        color=0x0C73D3,
-                    )
+
+                    embed.add_field(name="🔗 Linked Attachments:", value=image_url)
+                    embed.timestamp = datetime.datetime.utcnow()
                     return await ctx.send(embed=embed)
             else:
                 if (
@@ -527,11 +537,10 @@ class Tags(Extension):
                             },
                             {"$set": {"attachment_url": image_url, "content": content}},
                         )
-                    embed = Embed(
-                        description=f"__**Tag edited!**__ \n\n**Tag's name:** {name}\n**Content:** {content}",
-                        color=0x0C73D3,
-                    )
+
                     embed.set_image(url=image_url)
+                    embed.description = content
+                    embed.timestamp = datetime.datetime.utcnow()
                     return await ctx.send(embed=embed)
                 else:
                     image_url = catbox.url_upload(attachment.url)
@@ -553,10 +562,9 @@ class Tags(Extension):
                             },
                             {"$set": {"attachment_url": image_url, "content": content}},
                         )
-                    embed = Embed(
-                        description=f"__**Tag created!**__ \n\n**Tag's name:** {name}\n**Content:** {content}\n**Attachment:** {catbox.url_upload(attachment.url)}",
-                        color=0x0C73D3,
-                    )
+                    embed.add_field(name="🔗 Linked Attachments:", value=image_url)
+                    embed.description = content
+                    embed.timestamp = datetime.datetime.utcnow()
                     return await ctx.send(embed=embed)
         else:
             if content is not None:
@@ -584,7 +592,7 @@ class Tags(Extension):
                                     "names": name_regx,
                                     "author_id": ctx.author.id,
                                 },
-                                {"$set": {"attachment_url": None, "content": content}},
+                                {"$set": {"attachment_url": url, "content": content}},
                             )
                         except:
                             tags.update_one(
@@ -593,13 +601,12 @@ class Tags(Extension):
                                     "names": name_regx,
                                     "owner_id": ctx.author.id,
                                 },
-                                {"$set": {"attachment_url": None, "content": content}},
+                                {"$set": {"attachment_url": url, "content": content}},
                             )
-                        embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:**{content}",
-                            color=0x0C73D3,
-                        )
+
                         embed.set_image(url=url)
+                        embed.description = content
+                        embed.timestamp = datetime.datetime.utcnow()
                         return await ctx.send(embed=embed)
                     else:
                         try:
@@ -609,7 +616,7 @@ class Tags(Extension):
                                     "names": name_regx,
                                     "author_id": ctx.author.id,
                                 },
-                                {"$set": {"attachment_url": None, "content": content}},
+                                {"$set": {"attachment_url": url, "content": content}},
                             )
                         except:
                             tags.update_one(
@@ -618,12 +625,12 @@ class Tags(Extension):
                                     "names": name_regx,
                                     "owner_id": ctx.author.id,
                                 },
-                                {"$set": {"attachment_url": None, "content": content}},
+                                {"$set": {"attachment_url": url, "content": content}},
                             )
-                        embed = Embed(
-                            description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
-                            color=0x0C73D3,
-                        )
+
+                        embed.add_field(name="🔗 Linked Attachments:", value=url)
+                        embed.description = content
+                        embed.timestamp = datetime.datetime.utcnow()
                         return await ctx.send(embed=embed)
                 else:
                     try:
@@ -644,10 +651,9 @@ class Tags(Extension):
                             },
                             {"$set": {"attachment_url": None, "content": content}},
                         )
-                    embed = Embed(
-                        description=f"__**Tag created!**__ \n\n**Tag's name:** {name} \n**Tag's content:** \n{content}",
-                        color=0x0C73D3,
-                    )
+
+                    embed.description = content
+                    embed.timestamp = datetime.datetime.utcnow()
                     return await ctx.send(embed=embed)
 
     @slash_command(
@@ -667,7 +673,8 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -741,7 +748,8 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -788,7 +796,8 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -797,7 +806,8 @@ class Tags(Extension):
         tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_view is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -923,7 +933,8 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -934,13 +945,15 @@ class Tags(Extension):
         author_id = tag_to_claim["author_id"]
         if tag_to_claim is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         if owner_id == ctx.author.id:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You can't claim a tag you already own", color=0xDD2222
+                description=f"<:cross:839158779815657512> You can't claim a tag you already own",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -983,13 +996,17 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
 
         if member is None:
-            embed = Embed(description=f"<:cross:839158779815657512> You must include a member", color=0xDD2222)
+            embed = Embed(
+                description=f"<:cross:839158779815657512> You must include a member",
+                color=0xDD2222,
+            )
             await ctx.send(embed=embed, ephemeral=True)
             return
 
@@ -1007,7 +1024,8 @@ class Tags(Extension):
         )
         if tag_to_claim is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You don't own a tag with that name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You don't own a tag with that name",
+                color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
