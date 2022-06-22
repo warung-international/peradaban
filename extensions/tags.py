@@ -124,29 +124,28 @@ class Tags(Extension):
         content: str = None,
         attachment: OptionTypes.ATTACHMENT = None,
     ):
+
+        await ctx.defer()
+
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f":x: You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content",
-                color=0xDD2222,
+                description=f":x: You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (name is None) and (content is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name and content",
+                description=f":x: You must include tag's name and content",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-
-        await ctx.defer()
 
         name_regx = {"$regex": f"^{name}$", "$options": "i"}
         check = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
@@ -312,8 +311,7 @@ class Tags(Extension):
                         return await ctx.send(embed=embed)
         else:
             embed = Embed(
-                description=f"<:cross:839158779815657512> The tag `{name}` already exists",
-                color=0xDD2222,
+                description=f":x: The tag `{name}` already exists", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
 
@@ -347,29 +345,28 @@ class Tags(Extension):
         content: str = None,
         attachment: OptionTypes.ATTACHMENT = None,
     ):
+
+        await ctx.defer()
+
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f":x: You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's content",
-                color=0xDD2222,
+                description=f":x: You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (name is None) and (content is None):
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name and content",
+                description=f":x: You must include tag's name and content",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-
-        await ctx.defer()
 
         name_regx = {"$regex": f"^{name}$", "$options": "i"}
         tag_to_edit = tags.find_one(
@@ -385,7 +382,7 @@ class Tags(Extension):
             )
             if tag_to_edit is None:
                 embed = Embed(
-                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
+                    description=f":x: You don't own a tag called  `{name}`",
                     color=0xDD2222,
                 )
                 await ctx.send(embed=embed, ephemeral=True)
@@ -615,15 +612,15 @@ class Tags(Extension):
         required=True,
     )
     async def tag_delete(self, ctx: InteractionContext, name: str = None):
+
+        await ctx.defer()
+
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f":x: You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-
-        await ctx.defer()
 
         name_regx = {"$regex": f"^{name}$", "$options": "i"}
         tag_to_delete = tags.find_one(
@@ -640,7 +637,7 @@ class Tags(Extension):
             )
             if tag_to_delete is None:
                 embed = Embed(
-                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
+                    description=f":x: You don't own a tag called  `{name}`",
                     color=0xDD2222,
                 )
                 await ctx.send(embed=embed, ephemeral=True)
@@ -648,13 +645,12 @@ class Tags(Extension):
 
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
-        if cont is None:
-            if att is not None:
-                content = content + f"{att}"
+        if (cont is None) and (att is not None):
+            content = f"{att}"
         elif cont is not None:
-            content = content + f"{cont}"
+            content = f"{cont}"
             if att is not None:
-                content = content + f"\n{att}"
+                content = f"{cont}" + f"\n{att}"
         embed = Embed(
             description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {cont}",
             color=0x0C73D3,
@@ -690,21 +686,21 @@ class Tags(Extension):
     )
     @check(member_permissions(Permissions.MANAGE_MESSAGES))
     async def tag_admin_delete(self, ctx: InteractionContext, name: str = None):
+
+        await ctx.defer()
+
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f":x: You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-
-        await ctx.defer()
 
         name_regx = {"$regex": f"^{name}$", "$options": "i"}
         tag_to_delete = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_delete is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> There's not a tag with the name `{name}`",
+                description=f":x: There's not a tag with the name `{name}`",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
@@ -712,13 +708,12 @@ class Tags(Extension):
 
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
-        if cont is None:
-            if att is not None:
-                content = content + f"{att}"
+        if (cont is None) and (att is not None):
+            content = f"{att}"
         elif cont is not None:
-            content = content + f"{cont}"
+            content = f"{cont}"
             if att is not None:
-                content = content + f"\n{att}"
+                content = f"{cont}" + f"\n{att}"
         embed = Embed(
             description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {content}",
             color=0x0C73D3,
@@ -738,22 +733,21 @@ class Tags(Extension):
         required=True,
     )
     async def tag_info(self, ctx: InteractionContext, name: str = None):
+
+        await ctx.defer()
+
         if name is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+                description=f":x: You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
-
-        await ctx.defer()
 
         name_regx = {"$regex": f"^{name}$", "$options": "i"}
         tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_view is None:
             embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
-                color=0xDD2222,
+                description=f":x: I couldn't find a tag called `{name}`", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -863,6 +857,181 @@ class Tags(Extension):
             show_select_menu=False,
         )
         await paginator.send(ctx)
+
+    @slash_command(
+        name="tags", sub_cmd_name="claim", sub_cmd_description="claim orphaned tags"
+    )
+    @slash_option(
+        name="name",
+        description="Type a name of a tag",
+        opt_type=OptionTypes.STRING,
+        required=True,
+    )
+    async def tag_claim(self, ctx: InteractionContext, name: str = None):
+
+        await ctx.defer()
+
+        if name is None:
+            embed = Embed(
+                description=f":x: You must include tag's name", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        tag_to_claim = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
+        owner_id = tag_to_claim["owner_id"]
+        author_id = tag_to_claim["author_id"]
+        if tag_to_claim is None:
+            embed = Embed(
+                description=f":x: I couldn't find a tag called `{name}`", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+        if owner_id == ctx.author.id:
+            embed = Embed(
+                description=f":x: You can't claim a tag you already own", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+        if (author_id == ctx.author.id) and (owner_id != ctx.author.id):
+            stealer = await self.bot.fetch_user(owner_id)
+            embed = Embed(
+                description=f"{ctx.author.mention} You took back your tag {name} from {stealer.mention}.",
+                color=0x0C73D3,
+            )
+            await ctx.send(embed=embed)
+            tags.update_one(
+                {
+                    "guild_id": ctx.guild_id,
+                    "names": name_regx,
+                },
+                {"$set": {"owner_id": ctx.author.id}},
+            )
+            return
+
+    @slash_command(
+        name="tags", sub_cmd_name="gift", sub_cmd_description="gift your tags"
+    )
+    @slash_option(
+        name="name",
+        description="Type a name of a tag",
+        opt_type=OptionTypes.STRING,
+        required=True,
+    )
+    @slash_option(
+        name="member",
+        description="Select a member",
+        opt_type=OptionTypes.USER,
+        required=True,
+    )
+    async def tag_gift(
+        self, ctx: InteractionContext, name: str = None, member: OptionTypes.USER = None
+    ):
+
+        await ctx.defer()
+
+        if name is None:
+            embed = Embed(
+                description=f":x: You must include tag's name", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        if member is None:
+            embed = Embed(description=f":x: You must include a member", color=0xDD2222)
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        if member == ctx.author:
+            embed = Embed(
+                description=f":x: You can't gift to yourself, egomaniac...",
+                color=0xDD2222,
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+
+        name_regx = {"$regex": f"^{name}$", "$options": "i"}
+        tag_to_claim = tags.find_one(
+            {"guild_id": ctx.guild_id, "names": name_regx, "owner_id": ctx.author.id}
+        )
+        if tag_to_claim is None:
+            embed = Embed(
+                description=f":x: You don't own a tag with that name", color=0xDD2222
+            )
+            await ctx.send(embed=embed, ephemeral=True)
+            return
+        aceept_button_id = f"{member.id}_accept_tag_gift_button"
+        cancel_button_id = f"{ctx.author.id}_accept_tag_gift_button"
+        accept_button: list[ActionRow] = spread_to_rows(
+            Button(
+                style=ButtonStyles.GREEN, label="GIMME!", custom_id=aceept_button_id
+            ),
+            Button(style=ButtonStyles.RED, label="Cancel!", custom_id=cancel_button_id),
+        )
+
+        def check(component: Button) -> bool:
+            return (component.context.author == ctx.author) or (
+                component.context.author == member
+            )
+
+        gift_question = await ctx.send(
+            f"Hey {member.mention}! {ctx.author.mention} is gifting you a {name}, do you accept the gift?",
+            components=accept_button,
+        )
+        while True:
+            try:
+                reaction = await self.bot.wait_for_component(
+                    components=accept_button, timeout=30
+                )
+            except asyncio.TimeoutError:
+                accept_button[0].components[0].disabled = True
+                accept_button[0].components[1].disabled = True
+                await gift_question.edit(
+                    "Time ran out to accept the gift.", components=accept_button
+                )
+                return
+            if (reaction.context.custom_id == aceept_button_id) and (
+                member == reaction.context.author
+            ):
+                tags.update_one(
+                    {
+                        "guild_id": ctx.guild_id,
+                        "names": name_regx,
+                    },
+                    {"$set": {"owner_id": member.id}},
+                )
+                accept_button[0].components[0].disabled = True
+                accept_button[0].components[1].disabled = True
+                await gift_question.edit(
+                    f"Gift for a tag {name} accepted!",
+                    components=accept_button,
+                )
+                return
+            elif (reaction.context.custom_id == aceept_button_id) and (
+                member != reaction.context.author
+            ):
+                await ctx.send(
+                    f"{reaction.context.author.mention} You can't accept gifts not meant for you!",
+                    ephemeral=True,
+                )
+
+            if (reaction.context.custom_id == cancel_button_id) and (
+                ctx.author == reaction.context.author
+            ):
+                accept_button[0].components[0].disabled = True
+                accept_button[0].components[1].disabled = True
+                await gift_question.edit(
+                    f"Gift for a tag {tag_to_claim.names} cancelled!",
+                    components=accept_button,
+                )
+                return
+            elif (reaction.context.custom_id == cancel_button_id) and (
+                ctx.author != reaction.context.author
+            ):
+                await ctx.send(
+                    f"{reaction.context.author.mention} Only owners can cancel gifting!",
+                )
 
 
 def setup(bot):
