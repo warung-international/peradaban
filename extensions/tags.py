@@ -95,7 +95,7 @@ class Tags(Extension):
             )
 
     @tags_use.autocomplete("name")
-    async def tags_autocomplete(self, ctx: AutocompleteContext, name: str):
+    async def tags_use_autocomplete(self, ctx: AutocompleteContext, name: str):
         choices = []
         findall = tags.find({"guild_id": ctx.guild_id})
         for tag in findall:
