@@ -94,6 +94,19 @@ class Tags(Extension):
                 {"$set": {"no_of_times_used": uses + 1}},
             )
 
+    @tags_use.autocomplete("name")
+    async def tags_autocomplete(self, ctx: AutocompleteContext, name: str):
+        choices = []
+        findall = tags.find({"guild_id": ctx.guild_id})
+        for tag in findall:
+            tagname = tag["names"]
+            if len(tagname) > 25:
+                tag_name = tagname[0:25]
+            else:
+                tag_name = tagname
+            choices.append({"name": f"{tag_name}", "value": f"{tagname}"})
+        await ctx.send(choices=choices)
+
     @slash_command(
         name="tags",
         sub_cmd_name="create",
