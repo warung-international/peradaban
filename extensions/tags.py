@@ -56,13 +56,13 @@ class Tags(Extension):
         self.bot = bot
 
     @slash_command(
-        name="tags",
-        sub_cmd_name="use",
-        sub_cmd_description="allow's me to recall tags",
+        name="tag",
+        sub_cmd_name="get",
+        sub_cmd_description="Get a tag",
     )
     @slash_option(
         name="name",
-        description="Type a name of a tag",
+        description="Tag name",
         opt_type=OptionTypes.STRING,
         required=True,
     )
@@ -81,13 +81,49 @@ class Tags(Extension):
         else:
             at = tppk["attachment_url"]
             cont = tppk["content"]
+            t_title = tppk["names"]
+            if len(cont) > 2048:
+                cont = "{}...".format(cont[:2045])
+            own = tppk["owner_id"]
+            owner = await self.bot.fetch_user(own)
+            embed = Embed(color=0x5865F2)
+            embed.set_author(
+                name=str(owner),
+                url="https://discordapp.com/users/{}".format(owner.id),
+                icon_url=owner.avatar.url,
+            )
+            embed.title = f"__**{t_title}**__"
             if at is not None:
                 if cont is not None:
-                    await ctx.send(f"{cont}\n{at}")
+                    embed.description = cont
+                    if (
+                        at.endswith(".jpg")
+                        or at.endswith(".jpeg")
+                        or at.endswith(".png")
+                        or at.endswith(".gif")
+                    ):
+                        embed.set_image(url=at)
+                    else:
+                        embed.add_field(name="🔗 Linked Attachments:", value=at)
                 else:
-                    await ctx.send(f"{at}")
+                    if (
+                        at.endswith(".jpg")
+                        or at.endswith(".jpeg")
+                        or at.endswith(".png")
+                        or at.endswith(".gif")
+                    ):
+                        embed.set_image(url=at)
+                    else:
+                        embed.add_field(name="🔗 Linked Attachments:", value=at)
             else:
-                await ctx.send(f"{cont}")
+                embed.description = cont
+            embed.set_footer(
+                text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+            await ctx.send(embed=embed)
+
+            # tags counter
             uses = tppk["no_of_times_used"]
             tags.update_one(
                 {"names": regx, "guild_id": ctx.guild_id},
