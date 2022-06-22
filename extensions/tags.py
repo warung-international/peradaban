@@ -657,13 +657,13 @@ class Tags(Extension):
                     return await ctx.send(embed=embed)
 
     @slash_command(
-        name="tags",
+        name="tag",
         sub_cmd_name="delete",
-        sub_cmd_description="allow's me to delete tags that you own",
+        sub_cmd_description="Delete a tag",
     )
     @slash_option(
         name="name",
-        description="Type a name of a tag",
+        description="Tag name",
         opt_type=OptionTypes.STRING,
         required=True,
     )
@@ -700,19 +700,42 @@ class Tags(Extension):
                 await ctx.send(embed=embed, ephemeral=True)
                 return
 
+        embed = Embed(color=0x5865F2)
+        embed.set_author(
+            name=str(ctx.author),
+            url="https://discordapp.com/users/{}".format(ctx.author.id),
+            icon_url=ctx.author.avatar.url,
+        )
+        embed.title = f"Tag [{name}] Deleted!"
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
         if (cont is None) and (att is not None):
-            content = f"{att}"
+            if (
+                att.endswith(".png")
+                or att.endswith(".apng")
+                or att.endswith(".jpg")
+                or att.endswith(".jpeg")
+                or att.endswith(".gif")
+            ):
+                embed.set_image(url=att)
+            else:
+                embed.add_field(name="🔗 Linked Attachments:", value=att)
         elif cont is not None:
-            content = f"{cont}"
+            embed.description = cont
             if att is not None:
-                content = f"{cont}" + f"\n{att}"
-        embed = Embed(
-            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {cont}",
-            color=0x0C73D3,
-        )
+                if (
+                    att.endswith(".png")
+                    or att.endswith(".apng")
+                    or att.endswith(".jpg")
+                    or att.endswith(".jpeg")
+                    or att.endswith(".gif")
+                ):
+                    embed.set_image(url=att)
+                else:
+                    embed.add_field(name="🔗 Linked Attachments:", value=att)
+        embed.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed)
+
         try:
             tags.delete_one(
                 {
@@ -731,13 +754,13 @@ class Tags(Extension):
             )
 
     @slash_command(
-        name="tags",
-        sub_cmd_name="admin-delete",
-        sub_cmd_description="[ADMINISTRATORS ONLY] allow's me to delete any tag",
+        name="tag",
+        sub_cmd_name="mod-delete",
+        sub_cmd_description="Delete a tag [Requires 'MANAGE_MESSAGES' permissions]",
     )
     @slash_option(
         name="name",
-        description="Type a name of a tag",
+        description="Tag name",
         opt_type=OptionTypes.STRING,
         required=True,
     )
@@ -764,19 +787,44 @@ class Tags(Extension):
             await ctx.send(embed=embed, ephemeral=True)
             return
 
+        own = tag_to_delete["owner_id"]
+        owner = await self.bot.fetch_user(own)
+        embed = Embed(color=0x5865F2)
+        embed.set_author(
+            name=str(owner),
+            url="https://discordapp.com/users/{}".format(owner.id),
+            icon_url=owner.avatar.url,
+        )
+        embed.title = f"Tag [{name}] Deleted by Moderators!"
         cont = tag_to_delete["content"]
         att = tag_to_delete["attachment_url"]
         if (cont is None) and (att is not None):
-            content = f"{att}"
+            if (
+                att.endswith(".png")
+                or att.endswith(".apng")
+                or att.endswith(".jpg")
+                or att.endswith(".jpeg")
+                or att.endswith(".gif")
+            ):
+                embed.set_image(url=att)
+            else:
+                embed.add_field(name="🔗 Linked Attachments:", value=att)
         elif cont is not None:
-            content = f"{cont}"
+            embed.description = cont
             if att is not None:
-                content = f"{cont}" + f"\n{att}"
-        embed = Embed(
-            description=f"__**Tag deleted!**__ \n\n**Tag's name:** {name} \n**Tag's content:** {content}",
-            color=0x0C73D3,
-        )
+                if (
+                    att.endswith(".png")
+                    or att.endswith(".apng")
+                    or att.endswith(".jpg")
+                    or att.endswith(".jpeg")
+                    or att.endswith(".gif")
+                ):
+                    embed.set_image(url=att)
+                else:
+                    embed.add_field(name="🔗 Linked Attachments:", value=att)
+        embed.timestamp = datetime.datetime.utcnow()
         await ctx.send(embed=embed)
+
         tags.delete_one({"guild_id": ctx.guild_id, "names": name_regx})
 
     @slash_command(
