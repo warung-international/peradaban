@@ -178,19 +178,19 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f":x: You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (name is None) and (content is None):
             embed = Embed(
-                description=f":x: You must include tag's name and content",
+                description=f"<:cross:839158779815657512> You must include tag's name and content",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
@@ -361,7 +361,7 @@ class Tags(Extension):
                         return await ctx.send(embed=embed)
         else:
             embed = Embed(
-                description=f":x: The tag `{name}` already exists", color=0xDD2222
+                description=f"<:cross:839158779815657512> The tag `{name}` already exists", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
 
@@ -400,19 +400,19 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (content is None) and (attachment is None):
             embed = Embed(
-                description=f":x: You must include tag's content", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's content", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         elif (name is None) and (content is None):
             embed = Embed(
-                description=f":x: You must include tag's name and content",
+                description=f"<:cross:839158779815657512> You must include tag's name and content",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
@@ -432,7 +432,7 @@ class Tags(Extension):
             )
             if tag_to_edit is None:
                 embed = Embed(
-                    description=f":x: You don't own a tag called  `{name}`",
+                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
                     color=0xDD2222,
                 )
                 await ctx.send(embed=embed, ephemeral=True)
@@ -667,7 +667,7 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -687,7 +687,7 @@ class Tags(Extension):
             )
             if tag_to_delete is None:
                 embed = Embed(
-                    description=f":x: You don't own a tag called  `{name}`",
+                    description=f"<:cross:839158779815657512> You don't own a tag called  `{name}`",
                     color=0xDD2222,
                 )
                 await ctx.send(embed=embed, ephemeral=True)
@@ -741,7 +741,7 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -750,7 +750,7 @@ class Tags(Extension):
         tag_to_delete = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_delete is None:
             embed = Embed(
-                description=f":x: There's not a tag with the name `{name}`",
+                description=f"<:cross:839158779815657512> There's not a tag with the name `{name}`",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
@@ -788,7 +788,7 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -797,7 +797,7 @@ class Tags(Extension):
         tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
         if tag_to_view is None:
             embed = Embed(
-                description=f":x: I couldn't find a tag called `{name}`", color=0xDD2222
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -923,7 +923,7 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -934,13 +934,13 @@ class Tags(Extension):
         author_id = tag_to_claim["author_id"]
         if tag_to_claim is None:
             embed = Embed(
-                description=f":x: I couldn't find a tag called `{name}`", color=0xDD2222
+                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
         if owner_id == ctx.author.id:
             embed = Embed(
-                description=f":x: You can't claim a tag you already own", color=0xDD2222
+                description=f"<:cross:839158779815657512> You can't claim a tag you already own", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
@@ -983,19 +983,19 @@ class Tags(Extension):
 
         if name is None:
             embed = Embed(
-                description=f":x: You must include tag's name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You must include tag's name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
 
         if member is None:
-            embed = Embed(description=f":x: You must include a member", color=0xDD2222)
+            embed = Embed(description=f"<:cross:839158779815657512> You must include a member", color=0xDD2222)
             await ctx.send(embed=embed, ephemeral=True)
             return
 
         if member == ctx.author:
             embed = Embed(
-                description=f":x: You can't gift to yourself, egomaniac...",
+                description=f"<:cross:839158779815657512> You can't gift to yourself, egomaniac...",
                 color=0xDD2222,
             )
             await ctx.send(embed=embed, ephemeral=True)
@@ -1007,7 +1007,7 @@ class Tags(Extension):
         )
         if tag_to_claim is None:
             embed = Embed(
-                description=f":x: You don't own a tag with that name", color=0xDD2222
+                description=f"<:cross:839158779815657512> You don't own a tag with that name", color=0xDD2222
             )
             await ctx.send(embed=embed, ephemeral=True)
             return
