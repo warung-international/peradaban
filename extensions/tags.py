@@ -859,7 +859,11 @@ class Tags(Extension):
 
             def newpage(title, names):
                 embed = Embed(title=title, color=0x0C73D3)
-                embed.add_field(name="Tag Names", value=names, inline=True)
+                embed.add_field(name="Tag Names:", value=names, inline=True)
+                embed.set_footer(
+                    text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
+                )
+                embed.timestamp = datetime.datetime.utcnow()
                 return embed
 
             tag_names = tags.find({"guild_id": ctx.guild_id})
@@ -957,7 +961,7 @@ class Tags(Extension):
                     ):
                         embed.set_image(url=at)
                     else:
-                        embed.add_field(name="🔗 Linked Attachments:", value=at)
+                        embed.add_field(name="🔗 Linked Attachments:", value=at, inline=False)
                 else:
                     if (
                         at.endswith(".jpg")
@@ -967,9 +971,13 @@ class Tags(Extension):
                     ):
                         embed.set_image(url=at)
                     else:
-                        embed.add_field(name="🔗 Linked Attachments:", value=at)
+                        embed.add_field(name="🔗 Linked Attachments:", value=at, inline=False)
             else:
                 embed.description = cont
+            embed.set_footer(
+                text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
+            )
+            embed.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=embed)
 
     @tags.autocomplete("search")
