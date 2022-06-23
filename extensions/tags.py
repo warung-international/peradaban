@@ -829,325 +829,161 @@ class Tags(Extension):
 
     @slash_command(
         name="tags",
-        sub_cmd_name="info",
-        sub_cmd_description="allow's me to see information about a tag",
+        description="Get a list of tags, use the tag command to fetch a tag.",
     )
     @slash_option(
-        name="name",
-        description="Type a name of a tag",
+        name="search",
+        description="Tag search",
         opt_type=OptionTypes.STRING,
-        required=True,
+        required=False,
     )
-    async def tag_info(self, ctx: InteractionContext, name: str = None):
+    async def tags(self, ctx: InteractionContext, search: str = None):
 
         await ctx.defer()
 
-        if name is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
+        if search is None:
+
+            from naff.ext.paginators import Paginator
+
+            def chunks(l, n):
+                n = max(1, n)
+                return (l[i : i + n] for i in range(0, len(l), n))
+
+            def mlis(lst, s, e):
+                nc = list(chunks(lst, 20))
+                mc = ""
+                for testlist in nc[s:e]:
+                    for m in testlist:
+                        mc = mc + m
+                return mc
+
+            def newpage(title, names):
+                embed = Embed(title=title, color=0x0C73D3)
+                embed.add_field(name="Tag Names", value=names, inline=True)
+                return embed
+
+            tag_names = tags.find({"guild_id": ctx.guild_id})
+            names = []
+            for t in tag_names:
+                namanya = t["names"]
+                names.append(f"{namanya}\n")
+            if names == []:
+                embed = Embed(
+                    description=f"There are no tags for {ctx.guild.name}.",
+                    color=0x0C73D3,
+                )
+                await ctx.send(embed=embed)
+                return
+
+            s = -1
+            e = 0
+            embedcount = 1
+            nc = list(chunks(names, 20))
+
+            embeds = []
+            while embedcount <= len(nc):
+                s = s + 1
+                e = e + 1
+                embeds.append(
+                    newpage(f"List of tags for {ctx.guild.name}", mlis(names, s, e))
+                )
+                embedcount = embedcount + 1
+
+            paginator = Paginator(
+                client=self.bot,
+                pages=embeds,
+                timeout_interval=30,
+                show_select_menu=False,
             )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        name_regx = {"$regex": f"^{name}$", "$options": "i"}
-        tag_to_view = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
-        if tag_to_view is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        owner = tag_to_view["owner_id"]
-
-        if owner is not None:
-            tag_owner = await self.bot.fetch_user(owner)
+            await paginator.send(ctx)
 
         else:
-            tag_owner = "UNKNOWN"
 
-        current_owner = "Current owner"
-        last_owner = tag_owner
+            search_regx = {"$regex": f"^{search}$", "$options": "i"}
+            tag_to_view = tags.find_one(
+                {"guild_id": ctx.guild_id, "names": search_regx}
+            )
+            if tag_to_view is None:
+                embed = Embed(
+                    description=f"<:cross:839158779815657512> I couldn't find a tag called `{search}`",
+                    color=0xDD2222,
+                )
+                await ctx.send(embed=embed, ephemeral=True)
+                return
 
-        in_guild = find_member(ctx, owner)
-        if in_guild is None:
-            current_owner = "Currently Orphaned"
-            last_owner = f"Last owner: {tag_owner}"
+            owner = tag_to_view["owner_id"]
 
-        total_uses = tag_to_view["no_of_times_used"]
-        uses = total_uses
-        if total_uses is None:
-            uses = "UNKNOWN"
+            if owner is not None:
+                tag_owner = await self.bot.fetch_user(owner)
 
-        creation_date = tag_to_view["creation_date"]
-        if creation_date is None:
-            date = "UNKNOWN"
-        else:
-            date = f"<t:{math.ceil(creation_date.replace(tzinfo=timezone.utc).timestamp())}:R>"
-
-        att = tag_to_view["attachment_url"]
-        cont = tag_to_view["content"]
-        if att is not None:
-            if cont is not None:
-                content = f"{cont}\n{att}"
             else:
-                content = f"{att}"
-        else:
-            content = f"{cont}"
+                tag_owner = "UNKNOWN"
 
-        embed = Embed(title=f"Info about [{name}] tag", color=0x0C73D3)
-        embed.add_field(name=current_owner, value=last_owner)
-        embed.add_field(name="Total uses", value=uses)
-        embed.add_field(name="Created", value=date)
-        embed.add_field(name="Content", value=content)
-        await ctx.send(embed=embed)
+            current_owner = "Current Owner:"
+            last_owner = tag_owner
 
-    @slash_command(
-        name="tags",
-        sub_cmd_name="list",
-        sub_cmd_description="allow's me to see all tags for this server",
-    )
-    async def tag_list(self, ctx: InteractionContext):
+            in_guild = find_member(ctx, owner)
+            if in_guild is None:
+                current_owner = "Currently Orphaned"
+                last_owner = f"Last owner: {tag_owner}"
 
-        await ctx.defer()
+            total_uses = tag_to_view["no_of_times_used"]
+            uses = total_uses
+            if total_uses is None:
+                uses = "UNKNOWN"
 
-        from naff.ext.paginators import Paginator
+            creation_date = tag_to_view["creation_date"]
+            if creation_date is None:
+                date = "UNKNOWN"
+            else:
+                date = f"<t:{math.ceil(creation_date.replace(tzinfo=timezone.utc).timestamp())}:R>"
 
-        def chunks(l, n):
-            n = max(1, n)
-            return (l[i : i + n] for i in range(0, len(l), n))
-
-        def mlis(lst, s, e):
-            nc = list(chunks(lst, 20))
-            mc = ""
-            for testlist in nc[s:e]:
-                for m in testlist:
-                    mc = mc + m
-            return mc
-
-        def newpage(title, names):
-            embed = Embed(title=title, color=0x0C73D3)
-            embed.add_field(name="Tag Names", value=names, inline=True)
-            return embed
-
-        tag_names = tags.find({"guild_id": ctx.guild_id})
-        names = []
-        for t in tag_names:
-            namanya = t["names"]
-            names.append(f"{namanya}\n")
-        if names == []:
-            embed = Embed(
-                description=f"There are no tags for {ctx.guild.name}.", color=0x0C73D3
-            )
+            embed = Embed(title=f"Info about [{search}] tag", color=0x0C73D3)
+            embed.add_field(name=current_owner, value=last_owner, inline=True)
+            embed.add_field(name="Total uses:", value=uses, inline=True)
+            embed.add_field(name="Created:", value=date, inline=True)
+            at = tag_to_view["attachment_url"]
+            cont = tag_to_view["content"]
+            if len(cont) > 2048:
+                cont = "{}...".format(cont[:2045])
+            if at is not None:
+                if cont is not None:
+                    embed.description = cont
+                    if (
+                        at.endswith(".jpg")
+                        or at.endswith(".jpeg")
+                        or at.endswith(".png")
+                        or at.endswith(".gif")
+                    ):
+                        embed.set_image(url=at)
+                    else:
+                        embed.add_field(name="🔗 Linked Attachments:", value=at)
+                else:
+                    if (
+                        at.endswith(".jpg")
+                        or at.endswith(".jpeg")
+                        or at.endswith(".png")
+                        or at.endswith(".gif")
+                    ):
+                        embed.set_image(url=at)
+                    else:
+                        embed.add_field(name="🔗 Linked Attachments:", value=at)
+            else:
+                embed.description = cont
             await ctx.send(embed=embed)
-            return
 
-        s = -1
-        e = 0
-        embedcount = 1
-        nc = list(chunks(names, 20))
-
-        embeds = []
-        while embedcount <= len(nc):
-            s = s + 1
-            e = e + 1
-            embeds.append(
-                newpage(f"List of tags for {ctx.guild.name}", mlis(names, s, e))
-            )
-            embedcount = embedcount + 1
-
-        paginator = Paginator(
-            client=self.bot,
-            pages=embeds,
-            timeout_interval=30,
-            show_select_menu=False,
-        )
-        await paginator.send(ctx)
-
-    @slash_command(
-        name="tags", sub_cmd_name="claim", sub_cmd_description="claim orphaned tags"
-    )
-    @slash_option(
-        name="name",
-        description="Type a name of a tag",
-        opt_type=OptionTypes.STRING,
-        required=True,
-    )
-    async def tag_claim(self, ctx: InteractionContext, name: str = None):
-
-        await ctx.defer()
-
-        if name is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        name_regx = {"$regex": f"^{name}$", "$options": "i"}
-        tag_to_claim = tags.find_one({"guild_id": ctx.guild_id, "names": name_regx})
-        owner_id = tag_to_claim["owner_id"]
-        author_id = tag_to_claim["author_id"]
-        if tag_to_claim is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> I couldn't find a tag called `{name}`",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-        if owner_id == ctx.author.id:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You can't claim a tag you already own",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-        if (author_id == ctx.author.id) and (owner_id != ctx.author.id):
-            stealer = await self.bot.fetch_user(owner_id)
-            embed = Embed(
-                description=f"{ctx.author.mention} You took back your tag {name} from {stealer.mention}.",
-                color=0x0C73D3,
-            )
-            await ctx.send(embed=embed)
-            tags.update_one(
-                {
-                    "guild_id": ctx.guild_id,
-                    "names": name_regx,
-                },
-                {"$set": {"owner_id": ctx.author.id}},
-            )
-            return
-
-    @slash_command(
-        name="tags", sub_cmd_name="gift", sub_cmd_description="gift your tags"
-    )
-    @slash_option(
-        name="name",
-        description="Type a name of a tag",
-        opt_type=OptionTypes.STRING,
-        required=True,
-    )
-    @slash_option(
-        name="member",
-        description="Select a member",
-        opt_type=OptionTypes.USER,
-        required=True,
-    )
-    async def tag_gift(
-        self, ctx: InteractionContext, name: str = None, member: OptionTypes.USER = None
-    ):
-
-        await ctx.defer()
-
-        if name is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You must include tag's name",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        if member is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You must include a member",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        if member == ctx.author:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You can't gift to yourself, egomaniac...",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-
-        name_regx = {"$regex": f"^{name}$", "$options": "i"}
-        tag_to_claim = tags.find_one(
-            {"guild_id": ctx.guild_id, "names": name_regx, "owner_id": ctx.author.id}
-        )
-        if tag_to_claim is None:
-            embed = Embed(
-                description=f"<:cross:839158779815657512> You don't own a tag with that name",
-                color=0xDD2222,
-            )
-            await ctx.send(embed=embed, ephemeral=True)
-            return
-        aceept_button_id = f"{member.id}_accept_tag_gift_button"
-        cancel_button_id = f"{ctx.author.id}_accept_tag_gift_button"
-        accept_button: list[ActionRow] = spread_to_rows(
-            Button(
-                style=ButtonStyles.GREEN, label="GIMME!", custom_id=aceept_button_id
-            ),
-            Button(style=ButtonStyles.RED, label="Cancel!", custom_id=cancel_button_id),
-        )
-
-        def check(component: Button) -> bool:
-            return (component.context.author == ctx.author) or (
-                component.context.author == member
-            )
-
-        gift_question = await ctx.send(
-            f"Hey {member.mention}! {ctx.author.mention} is gifting you a {name}, do you accept the gift?",
-            components=accept_button,
-        )
-        while True:
-            try:
-                reaction = await self.bot.wait_for_component(
-                    components=accept_button, timeout=30
-                )
-            except asyncio.TimeoutError:
-                accept_button[0].components[0].disabled = True
-                accept_button[0].components[1].disabled = True
-                await gift_question.edit(
-                    "Time ran out to accept the gift.", components=accept_button
-                )
-                return
-            if (reaction.context.custom_id == aceept_button_id) and (
-                member == reaction.context.author
-            ):
-                tags.update_one(
-                    {
-                        "guild_id": ctx.guild_id,
-                        "names": name_regx,
-                    },
-                    {"$set": {"owner_id": member.id}},
-                )
-                accept_button[0].components[0].disabled = True
-                accept_button[0].components[1].disabled = True
-                await gift_question.edit(
-                    f"Gift for a tag {name} accepted!",
-                    components=accept_button,
-                )
-                return
-            elif (reaction.context.custom_id == aceept_button_id) and (
-                member != reaction.context.author
-            ):
-                await ctx.send(
-                    f"{reaction.context.author.mention} You can't accept gifts not meant for you!",
-                    ephemeral=True,
-                )
-
-            if (reaction.context.custom_id == cancel_button_id) and (
-                ctx.author == reaction.context.author
-            ):
-                accept_button[0].components[0].disabled = True
-                accept_button[0].components[1].disabled = True
-                await gift_question.edit(
-                    f"Gift for a tag {tag_to_claim.names} cancelled!",
-                    components=accept_button,
-                )
-                return
-            elif (reaction.context.custom_id == cancel_button_id) and (
-                ctx.author != reaction.context.author
-            ):
-                await ctx.send(
-                    f"{reaction.context.author.mention} Only owners can cancel gifting!",
-                )
+    @tags.autocomplete("search")
+    async def tags_autocomplete(self, ctx: AutocompleteContext, search: str):
+        choices = []
+        findall = tags.find({"guild_id": ctx.guild_id})
+        for tag in findall:
+            tagname = tag["names"]
+            if len(tagname) > 25:
+                tag_name = tagname[0:25]
+            else:
+                tag_name = tagname
+            choices.append({"name": f"{tag_name}", "value": f"{tagname}"})
+        await ctx.send(choices=choices)
 
 
 def setup(bot):
