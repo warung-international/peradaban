@@ -961,7 +961,9 @@ class Tags(Extension):
                     ):
                         embed.set_image(url=at)
                     else:
-                        embed.add_field(name="🔗 Linked Attachments:", value=at, inline=False)
+                        embed.add_field(
+                            name="🔗 Linked Attachments:", value=at, inline=False
+                        )
                 else:
                     if (
                         at.endswith(".jpg")
@@ -971,7 +973,9 @@ class Tags(Extension):
                     ):
                         embed.set_image(url=at)
                     else:
-                        embed.add_field(name="🔗 Linked Attachments:", value=at, inline=False)
+                        embed.add_field(
+                            name="🔗 Linked Attachments:", value=at, inline=False
+                        )
             else:
                 embed.description = cont
             embed.set_footer(
