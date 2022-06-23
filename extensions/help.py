@@ -32,7 +32,7 @@ class help(Extension):
             embed.set_thumbnail(url=self.bot.user.avatar.url)
             embed.add_field(
                 name="__Tool Commands__",
-                value="`uptime`, `urban`, `lmgtfy`, `guild-avatar`, `avatar`, `user-info`, `server-info`, `urban`, `ping`, `konesyntees`",
+                value="`uptime`, `lmgtfy`, `guild-avatar`, `avatar`, `user-info`, `server-info`, `urban`, `ping`, `konesyntees`",
                 inline=False,
             )
             embed.add_field(
