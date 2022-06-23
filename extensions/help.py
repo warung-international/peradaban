@@ -32,12 +32,27 @@ class help(Extension):
             embed.set_thumbnail(url=self.bot.user.avatar.url)
             embed.add_field(
                 name="__Tool Commands__",
-                value="`uptime`, `guild-avatar`, `avatar`, `user-info`, `server-info`, `urban`, `ping`, `konesyntees`, `t`",
+                value="`uptime`, `urban`, `lmgtfy`, `guild-avatar`, `avatar`, `user-info`, `server-info`, `urban`, `ping`, `konesyntees`",
+                inline=False,
+            )
+            embed.add_field(
+                name="__Context Menu Commands__",
+                value="`Avatar`, `Guild Avatar`, `User Info`",
                 inline=False,
             )
             embed.add_field(
                 name="__Economy Commands__",
-                value="`rank`, `levels`, `give-xp`, `remove-xp`",
+                value="`rank`, `levels`",
+                inline=False,
+            )
+            embed.add_field(
+                name="__Tags Commands__",
+                value="`tag get`, `tag create`, `tag edit`, `tag delete`, `tags`",
+                inline=False,
+            )
+            embed.add_field(
+                name="__Moderation Commands__",
+                value="`kick`, `ban`, `unban`, `mute on`, `mute off`, `slowmode on`, `slowmode off`, `clear`, `give-xp`, `remove-xp`, `tag mod-delete`",
                 inline=False,
             )
             embed.set_footer(
