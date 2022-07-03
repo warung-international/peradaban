@@ -311,26 +311,28 @@ class levellings(Extension):
 
     @listen()
     async def on_member_join(self, event: MemberAdd):
-        member = event.member
+        if event.guild_id == 922523614828433419:
+            member = event.member
 
-        if not member.bot:
-            stats = levelling.find_one({"id": member.id})
-            if stats is not None:
-                levelling.delete_one({"id": member.id})
-                logging.info(
-                    f"{member.display_name} has joined the server and they are in database, resetting their stats..."
-                )
+            if not member.bot:
+                stats = levelling.find_one({"id": member.id})
+                if stats is not None:
+                    levelling.delete_one({"id": member.id})
+                    logging.info(
+                        f"{member.display_name} has joined the server and they are in database, resetting their stats..."
+                    )
 
     @listen()
     async def on_member_leave(self, event: MemberRemove):
-        member = event.member
-        stats = levelling.find_one({"id": member.id})
-        if stats is not None:
-            levelling.delete_one({"id": member.id})
-        else:
-            logging.info(
-                f"{member.display_name} has left the server, but they were not in the database."
-            )
+        if event.guild_id == 922523614828433419:
+            member = event.member
+            stats = levelling.find_one({"id": member.id})
+            if stats is not None:
+                levelling.delete_one({"id": member.id})
+            else:
+                logging.info(
+                    f"{member.display_name} has left the server, but they were not in the database."
+                )
 
     async def process_xp(self, message):
         stats = levelling.find_one({"id": message.author.id})
@@ -492,42 +494,43 @@ class levellings(Extension):
 
     @listen()
     async def on_message_create(self, event: MessageCreate):
-        message = event.message
+        if event.guild_id == 922523614828433419:
+            message = event.message
 
-        # ignore someone
-        if message.author.id == 532264079641935883:
-            return
+            # ignore someone
+            if message.author.id == 532264079641935883:
+                return
 
-        # ignore some message types
-        if message.type == 8:
-            return
-        if message.type == 9:
-            return
-        if message.type == 10:
-            return
-        if message.type == 11:
-            return
-        if message.type == 7:
-            return
-        if message.type == 6:
-            return
+            # ignore some message types
+            if message.type == 8:
+                return
+            if message.type == 9:
+                return
+            if message.type == 10:
+                return
+            if message.type == 11:
+                return
+            if message.type == 7:
+                return
+            if message.type == 6:
+                return
 
-        # ignore bot channels
-        if message.channel.id == [
-            923044276831666177,  # bot-commands
-            939412784129654804,  # triviabot
-            923640602132873226,  # alita
-            925378055684390913,  # sheepbot
-            969489124736253962,  # karuta
-            923041554917122078,  # dank-memer
-            923986019152433242,  # soccer-guru
-            923070166521225286,  # owo-bot
-            923180949062176788,  # playground
-        ]:
-            return
+            # ignore bot channels
+            if message.channel.id == [
+                923044276831666177,  # bot-commands
+                939412784129654804,  # triviabot
+                923640602132873226,  # alita
+                925378055684390913,  # sheepbot
+                969489124736253962,  # karuta
+                923041554917122078,  # dank-memer
+                923986019152433242,  # soccer-guru
+                923070166521225286,  # owo-bot
+                923180949062176788,  # playground
+            ]:
+                return
 
-        if not message.author.bot:
-            await self.process_xp(message)
+            if not message.author.bot:
+                await self.process_xp(message)
 
 
 def setup(bot):
