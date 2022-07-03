@@ -79,80 +79,84 @@ welcome_msg = welcomer.raw_data["content"]
 class events(Extension):
     @listen()
     async def on_message_delete(self, event: MessageDelete):
-        if event.guild_id == 922523614828433419:
-            message = event.message
-            if message.author.bot:
-                return
-            embed = Embed(
-                description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
-                timestamp=datetime.datetime.utcnow(),
-                color=0xE74C3C,
-            )
-            embed.set_author(
-                name=f"{message.author.username}#{message.author.discriminator}",
-                icon_url=message.author.avatar.url,
-                url=f"https://discord.com/users/{message.author.id}",
-            )
+        message = event.message
+        if message.author.bot:
+            return
+        embed = Embed(
+            description=f"**Message sent by {message.author.mention} deleted in {message.channel.mention} <t:{int(time.time())}:R>**",
+            timestamp=datetime.datetime.utcnow(),
+            color=0xE74C3C,
+        )
+        embed.set_author(
+            name=f"{message.author.username}#{message.author.discriminator}",
+            icon_url=message.author.avatar.url,
+            url=f"https://discord.com/users/{message.author.id}",
+        )
 
-            content = message.content or "[No written message content]"
+        content = message.content or "[No written message content]"
 
-            if len(content) > 1020:
-                content = content[:1020] + "..."
+        if len(content) > 1020:
+            content = content[:1020] + "..."
 
-            embed.add_field(name="Message:", value=f"{content}", inline=False)
+        embed.add_field(name="Message:", value=f"{content}", inline=False)
 
-            if message.embeds and (count := len(message.embeds)) > 0:
-                embed.add_field(name="# Embeds", value=str(count), inline=True)
+        if message.embeds and (count := len(message.embeds)) > 0:
+            embed.add_field(name="# Embeds", value=str(count), inline=True)
 
-            if message.attachments and (count := len(message.attachments)) > 0:
-                embed.add_field(name="# Attachments", value=str(count), inline=True)
+        if message.attachments and (count := len(message.attachments)) > 0:
+            embed.add_field(name="# Attachments", value=str(count), inline=True)
 
-            embed.set_footer(
-                text=f"Author: {message.author.id} • Message ID: {message.id}"
-            )
-            channelid = 960731844066807838
-            server = self.bot.get_guild(server_id)
-            log_channel = server.get_channel(channelid)
-            return await log_channel.send(embed=embed)
+        embed.set_footer(text=f"Author: {message.author.id} • Message ID: {message.id}")
+        channelid = 960731844066807838
+        server = self.bot.get_guild(server_id)
+        log_channel = server.get_channel(channelid)
+        return await log_channel.send(embed=embed)
 
     @listen()
     async def on_message_update(self, event: MessageUpdate):
-        if event.guild_id == 922523614828433419:
-            if event.before is None:
-                return
-            before = event.before
-            after = event.after
-            if before.author.bot:
-                return
-            if before.content == after.content:
-                return
+        if not event.before or not event.after:
+            return
+        if event.before.content == event.after.content:
+            return
+        if before.author.bot or after.author.bot:
+            return
 
-            embed = Embed(
-                description=f"**Message Edited in <#{before.channel.id}> <t:{int(time.time())}:R>**",
-                timestamp=datetime.datetime.utcnow(),
-                color=0x1F8B4C,
-            )
-            embed.set_author(
-                name=f"{before.author}",
-                url=f"https://discord.com/users/{before.author.id}",
-                icon_url=before.author.avatar.url,
-            )
-            embed.add_field(name="Before:", value=before.content, inline=False)
-            embed.add_field(name="After:", value=after.content, inline=False)
-            embed.set_footer(
-                text=f"Message ID: {after.id} • User ID: {before.author.id}"
-            )
-            components = Button(
-                style=ButtonStyles.URL,
-                emoji="🔗",
-                label="Jump to Message",
-                url=after.jump_url,
-            )
-            channelid = 960731844066807838
+        before = event.before
+        after = event.after
 
-            server = self.bot.get_guild(server_id)
-            log_channel = server.get_channel(channelid)
-            await log_channel.send(embed=embed, components=components)
+        embed = Embed(
+            description=f"**Message Edited in <#{before.channel.id}> <t:{int(time.time())}:R>**",
+            timestamp=datetime.datetime.utcnow(),
+            color=0x1F8B4C,
+        )
+        embed.set_author(
+            name=f"{before.author}",
+            url=f"https://discord.com/users/{before.author.id}",
+            icon_url=before.author.avatar.url,
+        )
+
+        before_content = event.before.content or "[Empty]"
+        if len(before_content) > 1020:
+            before_content = before_content[:1020] + "..."
+
+        after_content = event.after.content or "[Empty]"
+        if len(after_content) > 1020:
+            after_content = after_content[:1020] + "..."
+
+        embed.add_field(name="Before:", value=before_content, inline=False)
+        embed.add_field(name="After:", value=after_content, inline=False)
+        embed.set_footer(text=f"Message ID: {after.id} • User ID: {before.author.id}")
+        components = Button(
+            style=ButtonStyles.URL,
+            emoji="🔗",
+            label="Jump to Message",
+            url=after.jump_url,
+        )
+        channelid = 960731844066807838
+
+        server = self.bot.get_guild(server_id)
+        log_channel = server.get_channel(channelid)
+        await log_channel.send(embed=embed, components=components)
 
     @listen()
     async def on_member_join(self, event: MemberAdd):
