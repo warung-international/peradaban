@@ -83,22 +83,43 @@ async def add_xp(self, message, xp, lvl):
     )
 
     if new_lvl > oldlvl:
-        channel = await message.guild.fetch_channel(927609583608942672)
-        await channel.send(
-            f"GG {message.author.mention}, you just advanced to level {new_lvl}!"
-        )
-        await check_lvl_rewards(self, message, new_lvl)
+        if new_lvl not in [5, 10, 20, 50, 80, 100]:
+            channel = await message.guild.fetch_channel(927609583608942672)
+            embed = Embed(color=0x00ff00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {new_lvl}**."
+            embed.set_thumbnail(url="https://warunginternational.eu.org/upgrade.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}", icon_url=message.author.avatar.url
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+            await channel.send(
+                embed=embed
+            )
+        else:
+            await check_lvl_rewards(self, message, new_lvl)
 
 async def check_lvl_rewards(self, message, lvl):
+
+    #define embed
+    embed = Embed(color=0x00ff00)
+    embed.title = ":loudspeaker: **LEVELED UP**"
+    embed.description = f"You've reached **Level {lvl}**."
+    embed.add_field(
+        name="Rank Unlocked", value=new_role.mention, inline=False
+    )
+    embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+    embed.set_footer(
+        text=f"{message.author.username}#{message.author.discriminator}", icon_url=message.author.avatar.url
+    )
+    embed.timestamp = datetime.datetime.utcnow()
+
     role_announce = await message.guild.fetch_channel(927609583608942672)
+
     if lvl >= 100:  # top commenters
         if (
             new_role := await message.guild.fetch_role(922559490405040159)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
             await message.author.remove_role(
@@ -109,10 +130,6 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922559067174608916)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
             await message.author.remove_role(
@@ -123,10 +140,6 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558950677815306)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
             await message.author.remove_role(
@@ -137,10 +150,6 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558889596166144)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
             await message.author.remove_role(
@@ -151,10 +160,6 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558836324323399)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
             await message.author.remove_role(
@@ -165,9 +170,5 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558781760610326)
         ) not in message.author.roles:
-            embed = Embed(
-                description=f"{message.author.display_name} has unlocked {new_role.mention} for reaching Level {lvl}",
-                color=0x00FF00,
-            )
             await role_announce.send(embed=embed)
             await message.author.add_role(new_role)
