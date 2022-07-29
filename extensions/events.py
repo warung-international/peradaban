@@ -714,7 +714,8 @@ class events(Extension):
     @listen()
     async def on_server_boost(self, event: MessageCreate):
         message = event.message
-        if event.guild_id == 922523614828433419:
+        
+        if message.guild.id == 922523614828433419:
             if message.type in [8, 9, 10, 11]:
                 embed = Embed(
                     colour=0x7289DA,
