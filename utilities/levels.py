@@ -14,6 +14,7 @@ cluster = MongoClient(os.getenv("MONGODB_URL"))
 
 levelling = cluster["dagelan"]["levelling"]
 
+
 async def process_xp(self, message):
     stats = levelling.find_one({"id": message.author.id})
     if stats is not None:
@@ -57,6 +58,7 @@ async def process_xp(self, message):
         }
         levelling.insert_one(newuser)
 
+
 async def add_xp(self, message, xp, lvl):
     # find the user id in our database
     stats = levelling.find_one({"id": message.author.id})
@@ -85,32 +87,31 @@ async def add_xp(self, message, xp, lvl):
     if new_lvl > oldlvl:
         if new_lvl not in [5, 10, 20, 50, 80, 100]:
             channel = await message.guild.fetch_channel(927609583608942672)
-            embed = Embed(color=0x00ff00)
+            embed = Embed(color=0x00FF00)
             embed.title = ":loudspeaker: **LEVELED UP**"
             embed.description = f"You've reached **Level {new_lvl}**."
             embed.set_thumbnail(url="https://warunginternational.eu.org/upgrade.png")
             embed.set_footer(
-                text=f"{message.author.username}#{message.author.discriminator}", icon_url=message.author.avatar.url
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
             )
             embed.timestamp = datetime.datetime.utcnow()
-            await channel.send(
-                embed=embed
-            )
+            await channel.send(embed=embed)
         else:
             await check_lvl_rewards(self, message, new_lvl)
 
+
 async def check_lvl_rewards(self, message, lvl):
 
-    #define embed
-    embed = Embed(color=0x00ff00)
+    # define embed
+    embed = Embed(color=0x00FF00)
     embed.title = ":loudspeaker: **LEVELED UP**"
     embed.description = f"You've reached **Level {lvl}**."
-    embed.add_field(
-        name="Rank Unlocked", value=new_role.mention, inline=False
-    )
+    embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
     embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
     embed.set_footer(
-        text=f"{message.author.username}#{message.author.discriminator}", icon_url=message.author.avatar.url
+        text=f"{message.author.username}#{message.author.discriminator}",
+        icon_url=message.author.avatar.url,
     )
     embed.timestamp = datetime.datetime.utcnow()
 
