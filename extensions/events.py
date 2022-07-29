@@ -118,7 +118,7 @@ class events(Extension):
             return
         if event.before.content == event.after.content:
             return
-        if before.author.bot or after.author.bot:
+        if event.before.author.bot or event.after.author.bot:
             return
 
         before = event.before
@@ -714,7 +714,7 @@ class events(Extension):
     @listen()
     async def on_server_boost(self, event: MessageCreate):
         message = event.message
-        
+
         if message.guild.id == 922523614828433419:
             if message.type in [8, 9, 10, 11]:
                 embed = Embed(
