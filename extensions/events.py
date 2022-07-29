@@ -262,7 +262,7 @@ class events(Extension):
                     roles = roles + f"{role} "
                 embed = Embed(
                     description=f"{member.mention} **was removed from {roles} role**",
-                    color=0x0C73D3,
+                    color=0xE74C3C,
                 )
                 embed.set_author(
                     name=f"{member}",
