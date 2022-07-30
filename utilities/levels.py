@@ -1,9 +1,16 @@
 import datetime
 import os
-import random
 from io import BytesIO
-from naff import Embed
 
+import aiohttp
+import naff
+from dotenv import load_dotenv
+from naff import (
+    Button,
+    ButtonStyles,
+    Embed,
+)
+from PIL import Image, ImageDraw, ImageFont
 from dotenv import load_dotenv
 from millify import millify
 from pymongo import MongoClient
@@ -14,6 +21,188 @@ cluster = MongoClient(os.getenv("MONGODB_URL"))
 
 levelling = cluster["dagelan"]["levelling"]
 
+async def rank(self, ctx, member):
+    if member is None:
+        member = ctx.author
+
+    stats = levelling.find_one({"id": member.id})
+
+    if member.bot:
+        embed = Embed(
+            description=f"<:cross:839158779815657512> {ctx.author.mention}, bots aren't cool enough to have rank!",
+            color=0xFF0000,
+        )
+        await ctx.send(embed=embed)
+
+    if stats is None:
+        if not member.bot:
+            embed = Embed(
+                description=f"<:cross:839158779815657512> **{member.display_name}** aren't ranked yet. Send some messages first, then try again.",
+                color=0xFF0000,
+            )
+            await ctx.send(embed=embed)
+    else:
+        premium = ctx.guild.premium_subscriber_role
+        # if premium not in member.roles:
+        xp = stats["formatxp"]
+        lvl = stats["level"]
+        rank = 0
+        rankings = levelling.find().sort("xp", -1)
+        for x in rankings:
+            rank += 1
+            if stats["id"] == x["id"]:
+                break
+        # Replace infoimgimg.png with your background image.
+        img = Image.open("assets/profile.png")
+        draw = ImageDraw.Draw(img)
+        # Make sure you insert a valid font from your folder.
+        ranks = ImageFont.truetype("assets/Quotable.otf", 55)
+        bankname = ImageFont.truetype("assets/Quotable.otf", 100)
+        coins = ImageFont.truetype("assets/Quotable.otf", 55)
+        userid = ImageFont.truetype("assets/ARIALUNI.otf", 70)
+        username = ImageFont.truetype("assets/ARIALUNI.otf", 45)
+        since = ImageFont.truetype("assets/ARIALUNI.otf", 25)
+        membersince = ImageFont.truetype("assets/ARIALUNI.otf", 54)
+        premier = ImageFont.truetype("assets/ARIALUNI.otf", 80)
+        #    (x,y)::↓ ↓ ↓ (text)::↓ ↓     (r,g,b)::↓ ↓ ↓
+        async with aiohttp.ClientSession() as session:
+            async with session.get(str(ctx.guild.icon.url)) as response:
+                guildicon = await response.read()
+        guildicons = (
+            Image.open(BytesIO(guildicon))
+            .resize((175, 175), Image.LANCZOS)
+            .convert("RGB")
+        )
+        c = Image.open("assets/cover.png").resize((175, 175)).convert("RGBA")
+        img.paste(guildicons, (1300, 55), c)
+
+        # USER AVATAR DISINI WEYYYYY
+        async with aiohttp.ClientSession() as session:
+            async with session.get(str(member.avatar.url)) as response:
+                image = await response.read()
+        avatar = (
+            Image.open(BytesIO(image))
+            .resize((90, 90), Image.LANCZOS)
+            .convert("RGB")
+        )
+        c = Image.open("assets/cover.png").resize((90, 90)).convert("RGBA")
+        img.paste(avatar, (100, 690), c)
+
+        draw.text(
+            (510, 85),
+            f"Warung International",
+            (255, 255, 255),
+            font=bankname,
+            align="right",
+        )
+        draw.text(
+            (100, 600),
+            f"{member.id}",
+            (255, 255, 255),
+            font=userid,
+        )
+        draw.text(
+            (200, 700),
+            f"{member.username}#{member.discriminator}",
+            (255, 255, 255),
+            font=username,
+        )
+        draw.text(
+            (232, 290),
+            f"{xp} XP (Experience Points)",
+            (255, 255, 255),
+            font=coins,
+        )
+
+        draw.text(
+            (232, 390),
+            f"Rank #{rank} | Level {lvl}",
+            (255, 255, 255),
+            font=ranks,
+        )
+
+        draw.text(
+            (700, 530),
+            f"Joined",
+            (255, 255, 255),
+            font=since,
+        )
+
+        joindate = member.joined_at.strftime("%m/%y")
+        draw.text(
+            (780, 500),
+            f"{joindate}",
+            (255, 255, 255),
+            font=membersince,
+        )
+
+        draw.text((1150, 700), f"Premium", (255, 255, 255), font=premier)
+
+        # Change Leveling/infoimg2.png if needed.
+        img.save(f"assets/card.png")
+        ffile = naff.File(f"assets/card.png")
+        await ctx.send(file=ffile)
+        # Make sure you insert a valid font from your folder.
+
+async def levels(self, ctx):
+    components = Button(
+        style=ButtonStyles.URL,
+        label="Go to your leaderboard",
+        url="https://warunginternational.eu.org/discord-leaderboard",
+    )
+
+    return await ctx.send("Here you go! 🧙‍♂️", components=components)
+
+async def givexp(self, ctx, member: naff.Member, amount: int):
+    if member.bot:
+        embed = Embed(
+            description=f"<:cross:839158779815657512> {ctx.author.mention}, bots do not have ranks!",
+            color=0xFF0000,
+        )
+        return await ctx.send(embed=embed)
+
+    stats = levelling.find_one({"id": member.id})
+    if stats is None:
+        if not member.bot:
+            embed = Embed(
+                description=f"<:cross:839158779815657512> **{member.display_name}** aren't ranked yet. Send some messages first, then try again.",
+                color=0xFF0000,
+            )
+            return await ctx.send(embed=embed)
+    else:
+        xp = stats["xp"] + amount
+        # if ctx.channel.id == botcommands_channel
+        levelling.update_one({"id": member.id}, {"$set": {"xp": xp}})
+        embed = Embed(
+            description=f"<:check:839158727512293406> {amount} XP has been given to **{member.display_name}**",
+            color=0x00FF00,
+        )
+        await ctx.send(embed=embed)
+
+async def removexp(self, ctx, member: naff.Member, amount: int):
+    if member.bot:
+        embed = Embed(
+            description=f"<:cross:839158779815657512> {ctx.author.mention}, bots do not have ranks!",
+            color=0xFF0000,
+        )
+        return await ctx.send(embed=embed)
+
+    stats = levelling.find_one({"id": member.id})
+    if stats is None:
+        if not member.bot:
+            embed = Embed(
+                description=f"<:cross:839158779815657512> **{member.display_name}** aren't ranked yet. Send some messages first, then try again.",
+                color=0xFF0000,
+            )
+            return await ctx.send(embed=embed)
+    else:
+        pepeq = stats["xp"] - amount
+        levelling.update_one({"id": member.id}, {"$set": {"xp": pepeq}})
+        embed = Embed(
+            description=f"<:check:839158727512293406> {amount} XP has been removed from **{member.display_name}**.",
+            color=0x00FF00,
+        )
+        return await ctx.send(embed=embed)
 
 async def process_xp(self, message):
     stats = levelling.find_one({"id": message.author.id})
