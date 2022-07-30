@@ -27,22 +27,6 @@ from naff.models.discord.base import DiscordObject
 from utilities.checks import *
 
 
-def random_string_generator():
-    characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
-    result = ""
-    for i in range(0, 8):
-        result += random.choice(characters)
-    return result
-
-
-def find_member(ctx, userid):
-    members = [m for m in ctx.guild.members if m.id == userid]
-    if members != []:
-        for m in members:
-            return m
-    return None
-
-
 w = ["w", "week", "weeks"]
 d = ["d", "day", "days"]
 h = ["h", "hour", "hours"]

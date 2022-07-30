@@ -37,20 +37,6 @@ cluster = MongoClient(os.getenv("MONGODB_URL"))
 tags = cluster["dagelan"]["tags"]
 
 
-def geturl(string):
-    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-    url = re.findall(regex, string)
-    return [x[0] for x in url]
-
-
-def find_member(ctx, userid):
-    members = [m for m in ctx.guild.members if m.id == userid]
-    if members != []:
-        for m in members:
-            return m
-    return None
-
-
 class Tags(Extension):
     def __init__(self, bot: Client):
         self.bot = bot

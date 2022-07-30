@@ -1,25 +1,14 @@
-import asyncio
 import datetime
 import logging
-import math
 import os
-import random
-import re
-import textwrap
 import time
-import traceback
-from pathlib import Path
 
-import aiohttp
-import github.GithubException
 import requests
 from dotenv import load_dotenv
 from github import Github
 from naff import (
-    ActionRow,
     Button,
     ButtonStyles,
-    ComponentContext,
     Embed,
     Extension,
     check,
@@ -118,7 +107,7 @@ class events(Extension):
             return
         if event.before.content == event.after.content:
             return
-        if before.author.bot or after.author.bot:
+        if event.before.author.bot or event.after.author.bot:
             return
 
         before = event.before
@@ -262,7 +251,7 @@ class events(Extension):
                     roles = roles + f"{role} "
                 embed = Embed(
                     description=f"{member.mention} **was removed from {roles} role**",
-                    color=0x0C73D3,
+                    color=0xE74C3C,
                 )
                 embed.set_author(
                     name=f"{member}",
@@ -714,7 +703,8 @@ class events(Extension):
     @listen()
     async def on_server_boost(self, event: MessageCreate):
         message = event.message
-        if event.guild_id == 922523614828433419:
+
+        if message.guild.id == 922523614828433419:
             if message.type in [8, 9, 10, 11]:
                 embed = Embed(
                     colour=0x7289DA,
