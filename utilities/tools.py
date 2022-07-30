@@ -11,6 +11,7 @@ from naff import (
 )
 from naff.ext.paginators import Paginator
 
+
 async def uptime(self, ctx):
     uptime = datetime.datetime.utcnow() - self.bot_start_time
 
@@ -41,6 +42,7 @@ async def uptime(self, ctx):
     embed.set_footer(text="Bot start time")
     await ctx.send(embed=embed)
 
+
 async def guild_avatar(self, ctx, member: naff.Member = None):
     if member is None:
         member = ctx.author
@@ -52,6 +54,7 @@ async def guild_avatar(self, ctx, member: naff.Member = None):
             color=0xFF0000,
         )
         return await ctx.send(embed=embed)
+
 
 async def avatar(self, ctx, member: naff.Member = None):
     if member is None:
@@ -96,11 +99,10 @@ async def userinfo(self, ctx, member: naff.Member = None):
         embed.add_field(name="Acknowledgements", value="Server Owner", inline=False)
     if member.id == developer:
         embed.add_field(name="Team", value="Bot Owner and Developer", inline=False)
-    embed.set_footer(
-        text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
-    )
+    embed.set_footer(text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url)
     embed.timestamp = datetime.datetime.utcnow()
     await ctx.send(embed=embed)
+
 
 async def server_info(self, ctx):
     _embed = Embed(title="Server info", color="#f2e785")
@@ -111,9 +113,7 @@ async def server_info(self, ctx):
         value=f"``{ctx.guild_id}``",
         inline=True,
     )
-    _embed.add_field(
-        name=":date: Created at", value=ctx.guild.created_at, inline=True
-    )
+    _embed.add_field(name=":date: Created at", value=ctx.guild.created_at, inline=True)
     _embed.add_field(name="Owner", value=f"<@{ctx.guild._owner_id}>", inline=True)
     _embed.add_field(
         name=f":busts_in_silhouette:Members - {ctx.guild.member_count}",
@@ -126,6 +126,7 @@ async def server_info(self, ctx):
         inline=True,
     )
     await ctx.send(embed=_embed)
+
 
 async def urban(self, ctx, word: str):
     try:
@@ -160,9 +161,7 @@ async def urban(self, ctx, word: str):
                 embed.title = title
                 embed.url = ud["permalink"]
 
-                description = ("{definition}\n\n**Example:** {example}").format(
-                    **ud
-                )
+                description = ("{definition}\n\n**Example:** {example}").format(**ud)
                 if len(description) > 2048:
                     description = "{}...".format(description[:2045])
                 embed.description = description
@@ -188,9 +187,11 @@ async def urban(self, ctx, word: str):
             "No Urban Dictionary entries were found, or there was an error in the process."
         )
 
+
 async def lmgtfy(self, ctx, search_terms: str):
     search_terms = urllib.parse.quote_plus(search_terms)
     await ctx.send("https://lmgtfy.app/?q={}".format(search_terms))
+
 
 async def ping(self, ctx):
     results = Embed(

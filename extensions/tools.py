@@ -23,7 +23,7 @@ class tools(Extension):
     def __init__(self, bot):
         self.bot = bot
         self.bot_start_time = datetime.datetime.utcnow()
-    
+
     @slash_command(
         name="uptime", description="Shows you for how long has the bot been online"
     )
