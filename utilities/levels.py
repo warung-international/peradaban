@@ -21,6 +21,7 @@ cluster = MongoClient(os.getenv("MONGODB_URL"))
 
 levelling = cluster["dagelan"]["levelling"]
 
+
 async def rank(self, ctx, member):
     if member is None:
         member = ctx.author
@@ -81,9 +82,7 @@ async def rank(self, ctx, member):
             async with session.get(str(member.avatar.url)) as response:
                 image = await response.read()
         avatar = (
-            Image.open(BytesIO(image))
-            .resize((90, 90), Image.LANCZOS)
-            .convert("RGB")
+            Image.open(BytesIO(image)).resize((90, 90), Image.LANCZOS).convert("RGB")
         )
         c = Image.open("assets/cover.png").resize((90, 90)).convert("RGBA")
         img.paste(avatar, (100, 690), c)
@@ -144,6 +143,7 @@ async def rank(self, ctx, member):
         await ctx.send(file=ffile)
         # Make sure you insert a valid font from your folder.
 
+
 async def levels(self, ctx):
     components = Button(
         style=ButtonStyles.URL,
@@ -152,6 +152,7 @@ async def levels(self, ctx):
     )
 
     return await ctx.send("Here you go! 🧙‍♂️", components=components)
+
 
 async def givexp(self, ctx, member: naff.Member, amount: int):
     if member.bot:
@@ -179,6 +180,7 @@ async def givexp(self, ctx, member: naff.Member, amount: int):
         )
         await ctx.send(embed=embed)
 
+
 async def removexp(self, ctx, member: naff.Member, amount: int):
     if member.bot:
         embed = Embed(
@@ -203,6 +205,7 @@ async def removexp(self, ctx, member: naff.Member, amount: int):
             color=0x00FF00,
         )
         return await ctx.send(embed=embed)
+
 
 async def process_xp(self, message):
     stats = levelling.find_one({"id": message.author.id})

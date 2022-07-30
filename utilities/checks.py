@@ -112,6 +112,7 @@ def geturl(string):
             return url
     return None
 
+
 def random_string_generator():
     characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
     result = ""
@@ -126,6 +127,7 @@ def find_member(ctx, userid):
         for m in members:
             return m
     return None
+
 
 def get_level_str(levels):
     last = ""
