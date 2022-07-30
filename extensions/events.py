@@ -1,25 +1,14 @@
-import asyncio
 import datetime
 import logging
-import math
 import os
-import random
-import re
-import textwrap
 import time
-import traceback
-from pathlib import Path
 
-import aiohttp
-import github.GithubException
 import requests
 from dotenv import load_dotenv
 from github import Github
 from naff import (
-    ActionRow,
     Button,
     ButtonStyles,
-    ComponentContext,
     Embed,
     Extension,
     check,
