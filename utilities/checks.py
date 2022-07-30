@@ -98,7 +98,7 @@ def geturl(string):
     """
     Parameters
     -----------
-    dt2: :class:`string`
+    url: :class:`string`
         The attachment link.
     Returns
     --------
@@ -111,3 +111,25 @@ def geturl(string):
         for url in url_2:
             return url
     return None
+
+def random_string_generator():
+    characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
+    result = ""
+    for i in range(0, 8):
+        result += random.choice(characters)
+    return result
+
+
+def find_member(ctx, userid):
+    members = [m for m in ctx.guild.members if m.id == userid]
+    if members != []:
+        for m in members:
+            return m
+    return None
+
+def get_level_str(levels):
+    last = ""
+    for level in levels.values():
+        if level is not None:
+            last = level
+    return last
