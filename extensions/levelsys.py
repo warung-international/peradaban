@@ -134,7 +134,7 @@ class levellings(Extension):
     async def on_message_create(self, event: MessageCreate):
         message = event.message
 
-        if message.guild.id == 922523614828433419:
+        if message.guild_id == 922523614828433419:
 
             # ignore someone
             if message.author.id == 532264079641935883:
