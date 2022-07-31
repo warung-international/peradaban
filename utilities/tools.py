@@ -3,12 +3,7 @@ import urllib.parse
 
 import aiohttp
 import naff
-from naff import (
-    Embed,
-    GuildCategory,
-    GuildText,
-    GuildVoice,
-)
+from naff import Embed, GuildCategory, GuildText, GuildVoice
 from naff.ext.paginators import Paginator
 
 

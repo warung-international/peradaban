@@ -26,7 +26,6 @@ from naff.models.discord.base import DiscordObject
 
 from utilities.checks import *
 
-
 w = ["w", "week", "weeks"]
 d = ["d", "day", "days"]
 h = ["h", "hour", "hours"]

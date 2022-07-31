@@ -6,14 +6,7 @@ import time
 import requests
 from dotenv import load_dotenv
 from github import Github
-from naff import (
-    Button,
-    ButtonStyles,
-    Embed,
-    Extension,
-    check,
-    listen,
-)
+from naff import Button, ButtonStyles, Embed, Extension, check, listen
 from naff.api.events.discord import (
     BanCreate,
     BanRemove,

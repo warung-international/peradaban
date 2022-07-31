@@ -1,19 +1,14 @@
 import datetime
-import random
 import os
+import random
 from io import BytesIO
 
 import aiohttp
 import naff
 from dotenv import load_dotenv
-from naff import (
-    Button,
-    ButtonStyles,
-    Embed,
-)
-from PIL import Image, ImageDraw, ImageFont
-from dotenv import load_dotenv
 from millify import millify
+from naff import Button, ButtonStyles, Embed
+from PIL import Image, ImageDraw, ImageFont
 from pymongo import MongoClient
 
 load_dotenv()
@@ -293,7 +288,9 @@ async def add_xp(self, message, xp, lvl):
                 icon_url=message.author.avatar.url,
             )
             embed.timestamp = datetime.datetime.utcnow()
-            await channel.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await channel.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
         else:
             await check_lvl_rewards(self, message, new_lvl)
 
@@ -318,7 +315,9 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922559490405040159)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
             await message.author.remove_role(
                 await message.guild.fetch_role(922559067174608916)
@@ -328,7 +327,9 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922559067174608916)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
             await message.author.remove_role(
                 await message.guild.fetch_role(922558950677815306)
@@ -338,7 +339,9 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558950677815306)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
             await message.author.remove_role(
                 await message.guild.fetch_role(922558889596166144)
@@ -348,7 +351,9 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558889596166144)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
             await message.author.remove_role(
                 await message.guild.fetch_role(922558836324323399)
@@ -358,7 +363,9 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558836324323399)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
             await message.author.remove_role(
                 await message.guild.fetch_role(922558781760610326)
@@ -368,5 +375,7 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558781760610326)
         ) not in message.author.roles:
-            await role_announce.send(f"Congratulations, {message.author.mention}", embed=embed)
+            await role_announce.send(
+                f"Congratulations, {message.author.mention}", embed=embed
+            )
             await message.author.add_role(new_role)
