@@ -18,16 +18,25 @@ jobs:
       contents: read
       packages: write
     steps:
+      - name: Generate token
+        id: app_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout Actions
         id: actions_checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ steps.app_token.outputs.token }}
 
       - name: Log in to the Container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           registry: ${{ env.REGISTRY }}
-          username: warung-international
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.APP_NAME }}
+          password: ${{ steps.app_token.outputs.token }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
