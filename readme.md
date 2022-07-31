@@ -1,6 +1,6 @@
 # Peradaban
 
-[![Discord server](https://img.shields.io/discord/922523614828433419?label=Join%20our%20Discord%20Server%21)](https://warunginternational.eu.org) [![Build Production](https://github.com/warung-international/peradaban/actions/workflows/build.yml/badge.svg)](https://github.com/warung-international/peradaban/actions/workflows/build.yml) [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/warung-international/peradaban/master.svg)](https://results.pre-commit.ci/latest/github/warung-international/peradaban/master) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Discord server](https://img.shields.io/discord/922523614828433419?label=Join%20our%20Discord%20Server%21)](https://warunginternational.eu.org) [![Build Production](https://github.com/warung-international/peradaban/actions/workflows/build.yml/badge.svg)](https://github.com/warung-international/peradaban/actions/workflows/build.yml) [![precommit-action](https://github.com/warung-international/peradaban/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/warung-international/peradaban/actions/workflows/pre-commit.yml) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 > OwO, What's this?
 
