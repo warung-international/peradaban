@@ -136,7 +136,11 @@ async def rank(self, ctx, member):
             font=membersince,
         )
 
-        draw.text((1150, 700), f"Premium", (255, 255, 255), font=premier)
+        premium = ctx.guild.premium_subscriber_role
+        if premium in member.roles or member.id == ctx.guild._owner_id:
+            draw.text((1150, 700), f"Premium", (255, 255, 255), font=premier)
+        else:
+            draw.text((1150, 700), f"Standard", (255, 255, 255), font=premier)
 
         # Change Leveling/infoimg2.png if needed.
         img.save(f"assets/card.png")
