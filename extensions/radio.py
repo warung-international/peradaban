@@ -34,7 +34,7 @@ class radio(Extension):
     async def start_radio(self, channel: GuildVoice):
         vc = await channel.connect(deafened=True)
         vc.play_no_wait(
-            await YTAudio.from_url("https://www.youtube.com/watch?v=5qap5aO4i9A")
+            await YTAudio.from_url("https://www.youtube.com/watch?v=rUxyKA_-grg")
         )
 
     async def should_leave(self, channel: GuildVoice):
