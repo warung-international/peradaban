@@ -710,7 +710,7 @@ class events(Extension):
                     inline=True,
                 )
                 embed.timestamp = datetime.datetime.utcnow()
-                general_chat = event.guild.get_channel(1003301531463983124)
+                general_chat = message.guild.get_channel(1003301531463983124)
                 await general_chat.send(embed=embed)
 
 
