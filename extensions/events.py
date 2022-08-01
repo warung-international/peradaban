@@ -700,7 +700,7 @@ class events(Extension):
         if message.guild.id == 922523614828433419:
             if message.type in [8, 9, 10, 11]:
                 embed = Embed(
-                    colour=0x7289DA,
+                    color=0x7289DA,
                     description=f"<:booster:914737485924409405> **{message.author.display_name}**, Terima Kasih sudah mem-boost server ini! :pray:",
                 )
                 embed.set_thumbnail(url=message.author.display_avatar)
