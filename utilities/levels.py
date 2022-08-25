@@ -297,24 +297,23 @@ async def add_xp(self, message, xp, lvl):
 
 async def check_lvl_rewards(self, message, lvl):
 
-    # define embed
-    embed = Embed(color=0x00FF00)
-    embed.title = ":loudspeaker: **LEVELED UP**"
-    embed.description = f"You've reached **Level {lvl}**."
-    embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
-    embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
-    embed.set_footer(
-        text=f"{message.author.username}#{message.author.discriminator}",
-        icon_url=message.author.avatar.url,
-    )
-    embed.timestamp = datetime.datetime.utcnow()
-
-    role_announce = await message.guild.fetch_channel(927609583608942672)
-
     if lvl >= 100:  # top commenters
         if (
             new_role := await message.guild.fetch_role(922559490405040159)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
@@ -327,6 +326,19 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922559067174608916)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
@@ -339,6 +351,19 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558950677815306)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
@@ -351,6 +376,19 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558889596166144)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
@@ -363,6 +401,19 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558836324323399)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
@@ -375,6 +426,19 @@ async def check_lvl_rewards(self, message, lvl):
         if (
             new_role := await message.guild.fetch_role(922558781760610326)
         ) not in message.author.roles:
+            # define embed
+            embed = Embed(color=0x00FF00)
+            embed.title = ":loudspeaker: **LEVELED UP**"
+            embed.description = f"You've reached **Level {lvl}**."
+            embed.add_field(name="Rank Unlocked", value=new_role.mention, inline=False)
+            embed.set_thumbnail(url="https://warunginternational.eu.org/trophy.png")
+            embed.set_footer(
+                text=f"{message.author.username}#{message.author.discriminator}",
+                icon_url=message.author.avatar.url,
+            )
+            embed.timestamp = datetime.datetime.utcnow()
+
+            role_announce = await message.guild.fetch_channel(927609583608942672)
             await role_announce.send(
                 f"Congratulations, {message.author.mention}", embed=embed
             )
