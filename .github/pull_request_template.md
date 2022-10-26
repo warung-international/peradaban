@@ -3,8 +3,7 @@
 <!-- Check whichever applies to your PR -->
 - [ ] Non-breaking code change
 - [ ] Breaking code change
-- [ ] Documentation change/addition
-- [ ] Tests change
+- [ ] CI/Tests change
 
 ## Description
 <!-- Clearly and concisely describe what this PR is for, and why you feel it should be merged. -->
@@ -17,6 +16,5 @@
 ## Checklist
 
 <!-- These are actions you **must** have taken, if you haven't, your PR will be rejected -->
-- [ ] I've formatted my code with [Black](https://black.readthedocs.io/en/stable/)
 - [ ] I've ensured my code works on `Python 3.10.x`
 - [ ] I've tested my code
