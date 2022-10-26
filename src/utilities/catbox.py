@@ -1,7 +1,7 @@
 import requests
 
 
-class CatBox:
+class catbox:
     def url_upload(url=None):
         """
         Upload a file to catbox.moe and returns the url
