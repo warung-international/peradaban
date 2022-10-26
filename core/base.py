@@ -26,8 +26,8 @@ load_dotenv()
 
 cluster = MongoClient(os.getenv("MONGODB_URL"))
 
-context = cluster["madeline"]["context"]
-error_logs = cluster["madeline"]["error"]
+context = cluster["dagelan"]["context"]
+error_logs = cluster["dagelan"]["error"]
 
 class CustomClient(Client):
     """Subclass of naff.Client with our own customized methods"""
