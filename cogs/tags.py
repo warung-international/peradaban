@@ -27,8 +27,7 @@ from naff import (
 )
 from pymongo import MongoClient
 
-from utilities.catbox import CatBox as catbox
-from utilities.checks import *
+from src.utilities import *
 
 load_dotenv()
 

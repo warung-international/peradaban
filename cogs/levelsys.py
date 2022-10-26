@@ -19,8 +19,7 @@ from naff import (
 from naff.api.events.discord import MemberAdd, MemberRemove, MessageCreate
 from pymongo import MongoClient
 
-from utilities.checks import *
-from utilities.levels import *
+from src.utilities import *
 
 load_dotenv()
 

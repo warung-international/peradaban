@@ -24,7 +24,7 @@ from naff.client.errors import NotFound
 from naff.ext.paginators import Paginator
 from naff.models.discord.base import DiscordObject
 
-from utilities.checks import *
+from src.utilities import *
 
 w = ["w", "week", "weeks"]
 d = ["d", "day", "days"]

@@ -20,7 +20,7 @@ from naff.api.events.discord import (
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pymongo import MongoClient
 
-from utilities.checks import *
+from src.utilities import *
 
 load_dotenv()
 
