@@ -29,6 +29,7 @@ cluster = MongoClient(os.getenv("MONGODB_URL"))
 context = cluster["dagelan"]["context"]
 error_logs = cluster["dagelan"]["error"]
 
+
 class CustomClient(Client):
     """Subclass of naff.Client with our own customized methods"""
 
