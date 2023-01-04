@@ -169,4 +169,3 @@ class levellings(Extension):
 
             if not message.author.bot:
                 await process_xp(self, message)
-
