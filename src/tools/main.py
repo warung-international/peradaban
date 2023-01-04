@@ -2,21 +2,11 @@ import re
 
 import aiohttp
 import naff
-from algoliasearch.search_client import SearchClient
 from dateutil.parser import isoparse
 
 DISAMBIGUATION_CAT = "Category:All disambiguation pages"
 WHITESPACE = re.compile(r"[\n\s]{4,}")
 NEWLINES = re.compile(r"\n+")
-
-
-def __init__(self, bot):
-    self.bot = bot
-    ## Fill out from trying a search on the ddevs portal
-    app_id = "BH4D9OD16A"
-    api_key = "f37d91bd900bbb124c8210cca9efcc01"
-    self.search_client = SearchClient.create(app_id, api_key)
-    self.index = self.search_client.init_index("discord")
 
 
 def generate_payload(query: str):
