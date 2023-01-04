@@ -106,6 +106,5 @@ class help(Extension):
         return last
 
 
-def setup(bot):
-    # This is called by dis-snek so it knows how to load the Extension
-    help(bot)
+    async def slash_help(self, ctx):
+        await self.help(ctx)

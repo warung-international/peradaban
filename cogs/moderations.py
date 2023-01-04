@@ -442,7 +442,3 @@ class Moderation(Extension):
         embed = Embed(description=f"**Reason:** {reason}")
         embed.set_author(name=f"{member} has been unmuted", icon_url=member.avatar.url)
         return await ctx.send(embed=embed, ephemeral=True)
-
-
-def setup(bot):
-    Moderation(bot)

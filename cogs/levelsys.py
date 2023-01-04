@@ -170,7 +170,3 @@ class levellings(Extension):
             if not message.author.bot:
                 await process_xp(self, message)
 
-
-def setup(bot):
-    # This is called by dis-snek so it knows how to load the Extension
-    levellings(bot)

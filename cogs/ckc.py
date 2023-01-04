@@ -311,9 +311,3 @@ class CoolKidsClub(Extension):
                 ),
                 ephemeral=True,
             )
-
-
-def setup(bot: CustomClient):
-    """Let naff load the extension"""
-
-    CoolKidsClub(bot)

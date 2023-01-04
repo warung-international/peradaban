@@ -735,8 +735,3 @@ class events(Extension):
             embed.timestamp = datetime.datetime.utcnow()
             general_chat = server.get_channel(1003301531463983124)
             await general_chat.send(embed=embed)
-
-
-def setup(bot):
-    # This is called by dis-snek so it knows how to load the Scale
-    events(bot)

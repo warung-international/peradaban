@@ -598,8 +598,3 @@ class tools(Extension):
                 show_select_menu=False,
             )
             await paginators.send(ctx)
-
-
-def setup(bot):
-    # This is called by dis-snek so it knows how to load the Extension
-    tools(bot)

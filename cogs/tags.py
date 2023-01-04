@@ -981,7 +981,3 @@ class Tags(Extension):
                 tag_name = tagname
             choices.append({"name": f"{tag_name}", "value": f"{tagname}"})
         await ctx.send(choices=choices)
-
-
-def setup(bot):
-    Tags(bot)
