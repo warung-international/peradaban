@@ -1,0 +1,8 @@
+# fly.toml file generated for proud-wildflower-8410 on 2023-01-04T12:44:19+07:00
+
+app = "Peradaban"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
