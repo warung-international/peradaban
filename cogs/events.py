@@ -618,7 +618,7 @@ class events(Extension):
         # read-this channel
         rtc_channel = await server.fetch_channel(rtc)
         rtc_text = await rtc_channel.fetch_message(rtc_msg)
-        await rtc_text.edit(results)
+        await rtc_text.edit(content=results)
 
     @listen()
     async def on_button(self, b):
