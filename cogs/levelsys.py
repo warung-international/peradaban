@@ -156,14 +156,6 @@ class levellings(Extension):
             # ignore bot channels
             if message.channel.id == [
                 923044276831666177,  # bot-commands
-                939412784129654804,  # triviabot
-                923640602132873226,  # alita
-                925378055684390913,  # sheepbot
-                969489124736253962,  # karuta
-                923041554917122078,  # dank-memer
-                923986019152433242,  # soccer-guru
-                923070166521225286,  # owo-bot
-                923180949062176788,  # playground
             ]:
                 return
 
