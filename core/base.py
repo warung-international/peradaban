@@ -104,5 +104,5 @@ class CustomClient(Client):
 
         self.logger.info(f"{os.getenv('PROJECT_NAME')} - Startup Finished!")
         self.logger.info(
-            "Note: Discord needs up to an hour to load global commands / context menus. They may not appear immediately\n"
+            "Note: Discord needs up to an hour to load context menus. They may not appear immediately."
         )
