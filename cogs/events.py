@@ -609,10 +609,10 @@ class events(Extension):
         info_embed = Embed(
             title="Role Info:", description=f"{results2}", color=0x3874FF
         )
-        info_embed.set_footer(
-            text=f"Press a button below to get a role!",
-            icon_url="https://probot.media/luV8g6k4WT.gif",
-        )
+        # info_embed.set_footer(
+        #    text=f"Press a button below to get a role!",
+        #    icon_url="https://probot.media/luV8g6k4WT.gif",
+        # )
         await first.edit(embed=info_embed)
 
         # read-this channel
