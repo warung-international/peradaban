@@ -27,8 +27,7 @@ from naff import (
 )
 from pymongo import MongoClient
 
-from utilities.catbox import CatBox as catbox
-from utilities.checks import *
+from src.utilities import *
 
 load_dotenv()
 
@@ -982,7 +981,3 @@ class Tags(Extension):
                 tag_name = tagname
             choices.append({"name": f"{tag_name}", "value": f"{tagname}"})
         await ctx.send(choices=choices)
-
-
-def setup(bot):
-    Tags(bot)

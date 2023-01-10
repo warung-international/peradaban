@@ -19,7 +19,7 @@ from naff.ext.debug_extension import DebugExtension
 from core.base import CustomClient
 from core.extensions_loader import load_extensions
 from core.logging import init_logging
-from utilities.checks import *
+from src.utilities import *
 
 # sentry sdk init
 sentry_sdk.init(

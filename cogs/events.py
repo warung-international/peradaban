@@ -20,7 +20,7 @@ from naff.api.events.discord import (
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pymongo import MongoClient
 
-from utilities.checks import *
+from src.utilities import *
 
 load_dotenv()
 
@@ -609,89 +609,16 @@ class events(Extension):
         info_embed = Embed(
             title="Role Info:", description=f"{results2}", color=0x3874FF
         )
-        info_embed.set_footer(
-            text=f"Press a button below to get a role!",
-            icon_url="https://probot.media/luV8g6k4WT.gif",
-        )
+        # info_embed.set_footer(
+        #    text=f"Press a button below to get a role!",
+        #    icon_url="https://probot.media/luV8g6k4WT.gif",
+        # )
         await first.edit(embed=info_embed)
 
         # read-this channel
         rtc_channel = await server.fetch_channel(rtc)
         rtc_text = await rtc_channel.fetch_message(rtc_msg)
-        await rtc_text.edit(results)
-
-    @listen()
-    async def on_button(self, b):
-        ctx = b.context
-        if ctx.custom_id == "assign_role":
-            await ctx.defer(ephemeral=True)
-            ping_id = 922878963817263154
-            if ctx.author.has_role(ping_id):
-                return await ctx.send("😕 You're already verified!", ephemeral=True)
-            else:
-                await ctx.author.add_role(ping_id, "User requested to add role")
-                return await ctx.send(
-                    "Congratulations, you're verified!\nEnjoy your stay :wave:",
-                    ephemeral=True,
-                )
-        if ctx.custom_id == "lang_en":
-            await ctx.defer(ephemeral=True)
-            eng_role = 965296016997879868
-            if ctx.author.has_role(eng_role):
-                await ctx.author.remove_role(eng_role, "User requested to remove role")
-                return await ctx.send(
-                    f"The <@&{eng_role}> role has been removed", ephemeral=True
-                )
-            else:
-                await ctx.author.add_role(eng_role, "User requested to add role")
-                return await ctx.send(
-                    f"The <@&{eng_role}> role has been added", ephemeral=True
-                )
-        if ctx.custom_id == "lang_id":
-            await ctx.defer(ephemeral=True)
-            id_role = 965296147658846212
-            if ctx.author.has_role(id_role):
-                await ctx.author.remove_role(id_role, "User requested to remove role")
-                return await ctx.send(
-                    f"The <@&{id_role}> role has been removed", ephemeral=True
-                )
-            else:
-                await ctx.author.add_role(id_role, "User requested to add role")
-                return await ctx.send(
-                    f"The <@&{id_role}> role has been added", ephemeral=True
-                )
-
-        if ctx.custom_id == "ping_events":
-            await ctx.defer(ephemeral=True)
-            event_role = 965299119860097055
-            if ctx.author.has_role(event_role):
-                await ctx.author.remove_role(
-                    event_role, "User requested to remove role"
-                )
-                return await ctx.send(
-                    f"The <@&{event_role}> role has been removed", ephemeral=True
-                )
-            else:
-                await ctx.author.add_role(event_role, "User requested to add role")
-                return await ctx.send(
-                    f"The <@&{event_role}> role has been added", ephemeral=True
-                )
-
-        if ctx.custom_id == "ping_announcements":
-            await ctx.defer(ephemeral=True)
-            announce_role = 965299163828981772
-            if ctx.author.has_role(announce_role):
-                await ctx.author.remove_role(
-                    announce_role, "User requested to remove role"
-                )
-                return await ctx.send(
-                    f"The <@&{announce_role}> role has been removed", ephemeral=True
-                )
-            else:
-                await ctx.author.add_role(announce_role, "User requested to add role")
-                return await ctx.send(
-                    f"The <@&{announce_role}> role has been added", ephemeral=True
-                )
+        await rtc_text.edit(content=results)
 
     @listen()
     async def on_server_boost(self, event: MessageCreate):
@@ -735,8 +662,3 @@ class events(Extension):
             embed.timestamp = datetime.datetime.utcnow()
             general_chat = server.get_channel(1003301531463983124)
             await general_chat.send(embed=embed)
-
-
-def setup(bot):
-    # This is called by dis-snek so it knows how to load the Scale
-    events(bot)

@@ -24,7 +24,7 @@ from naff.client.errors import NotFound
 from naff.ext.paginators import Paginator
 from naff.models.discord.base import DiscordObject
 
-from utilities.checks import *
+from src.utilities import *
 
 w = ["w", "week", "weeks"]
 d = ["d", "day", "days"]
@@ -442,7 +442,3 @@ class Moderation(Extension):
         embed = Embed(description=f"**Reason:** {reason}")
         embed.set_author(name=f"{member} has been unmuted", icon_url=member.avatar.url)
         return await ctx.send(embed=embed, ephemeral=True)
-
-
-def setup(bot):
-    Moderation(bot)

@@ -42,7 +42,3 @@ class radio(Extension):
         if len(channel.voice_members) == 1:
             if vc := self.bot.get_bot_voice_state(channel.guild.id):
                 await vc.disconnect()
-
-
-def setup(bot):
-    radio(bot)
