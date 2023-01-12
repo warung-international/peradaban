@@ -10,6 +10,10 @@ services:
       - peradaban-network
     restart:
       on-failure
+  utils:
+    restart: on-failure
+    image: ghcr.io/warung-international/utils:master
+    env_file: .env
 
 networks:
   peradaban-network:
