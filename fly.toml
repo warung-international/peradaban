@@ -1,4 +1,3 @@
 app = "late-water-6397"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = []
