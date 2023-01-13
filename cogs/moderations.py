@@ -12,11 +12,9 @@ from naff import (
     InteractionContext,
     OptionTypes,
     Permissions,
-    PrefixedContext,
     SlashCommandChoice,
     check,
     listen,
-    prefixed_command,
     slash_command,
     slash_option,
 )
