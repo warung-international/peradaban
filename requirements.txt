@@ -1,6 +1,5 @@
 aiohttp
 dnspython
-google-cloud-vision
 item
 millify
 naff[voice]
